@@ -11,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".feature.splash.SplashActivity">
+        <activity
+            android:name=".feature.splash.SplashActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +23,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".feature.login.LoginActivity" />
+        <activity
+            android:name=".feature.login.LoginActivity"
+            android:configChanges="orientation|screenSize" />
 
         <activity android:name=".feature.main.MainActivity" />
 
