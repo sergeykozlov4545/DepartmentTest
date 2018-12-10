@@ -24,8 +24,13 @@ class SplashActivity : BaseActivity(), SplashView {
         presenter.checkAuthorizedUser()
     }
 
-    override fun openLoginActivity(authorizedUser: AuthorizedUser?) =
-            LoginActivity.start(this, authorizedUser)
+    override fun openLoginActivity(authorizedUser: AuthorizedUser?, errorMessage: String) {
+        LoginActivity.start(this, authorizedUser, errorMessage)
+        finish()
+    }
 
-    override fun openMainActivity() = MainActivity.start(this)
+    override fun openMainActivity() {
+        MainActivity.start(this)
+        finish()
+    }
 }

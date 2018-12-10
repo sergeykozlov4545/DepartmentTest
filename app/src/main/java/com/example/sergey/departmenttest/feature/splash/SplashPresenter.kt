@@ -1,7 +1,6 @@
 package com.example.sergey.departmenttest.feature.splash
 
 import com.example.sergey.departmenttest.domain.interactor.AuthorizeInteractor
-import com.example.sergey.departmenttest.exception.OperationException
 import com.example.sergey.departmenttest.extansion.runInCoroutine
 import com.example.sergey.departmenttest.feature.core.BasePresenter
 import com.example.sergey.departmenttest.feature.core.Presenter
@@ -20,11 +19,11 @@ class SplashPresenterImpl(
         val scope = view as? CoroutineScope ?: return
 
         scope.runInCoroutine {
-            val authorizedUser = authorizeInteractor.getAuthorizedUser().takeIf { it != null }
-                    ?: run {
-                        view.openLoginActivity()
-                        return@runInCoroutine
-                    }
+            val authorizedUser = authorizeInteractor.getAuthorizedUser()
+            if (authorizedUser == null) {
+                view.openLoginActivity()
+                return@runInCoroutine
+            }
 
             val status = authorizeInteractor.authorizeUser(authorizedUser.login, authorizedUser.password)
             if (status.isSuccess) {
@@ -32,8 +31,7 @@ class SplashPresenterImpl(
                 return@runInCoroutine
             }
 
-            view.openLoginActivity(authorizedUser)
-            throw OperationException(status.message)
+            view.openLoginActivity(authorizedUser, status.message)
         }
     }
 }
