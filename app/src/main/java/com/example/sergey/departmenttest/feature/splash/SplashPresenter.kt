@@ -11,7 +11,7 @@ interface SplashPresenter : BasePresenter<SplashView> {
 }
 
 class SplashPresenterImpl(
-        private val view: SplashView,
+        override val view: SplashView,
         private val authorizeInteractor: AuthorizeInteractor
 ) : Presenter<SplashView>(view), SplashPresenter {
 

@@ -1,5 +1,6 @@
 package com.example.sergey.departmenttest.data.remote
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -18,6 +19,7 @@ class ServiceManagerImpl : ServiceManager {
     init {
         retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
     }

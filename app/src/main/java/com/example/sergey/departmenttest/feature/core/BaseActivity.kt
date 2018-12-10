@@ -8,6 +8,7 @@ import com.example.sergey.departmenttest.extansion.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import java.io.IOException
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("Registered")
@@ -31,10 +32,10 @@ open class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView {
     }
 
     override fun onError(exception: Exception) {
-        val message = if (exception.message.isNullOrEmpty()) {
-            getString(R.string.retryOperation)
-        } else {
-            exception.message
+        val message = when {
+            exception is IOException -> getString(R.string.connectionError)
+            exception.message.isNullOrEmpty() -> getString(R.string.retryOperation)
+            else -> exception.message
         }
         toast(message!!)
     }

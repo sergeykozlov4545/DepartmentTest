@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">DepartmentTest</string>
 
+    <string name="connectionError">Ошибка сети</string>
     <string name="retryOperation">Произошла ошибка. Повторите операцию позднее.</string>
+
+    <!--LoginActivity-->
+    <string name="loginViewHint">Логин</string>
+    <string name="PasswordViewHint">Пароль</string>
+    <string name="sigIn">Войти</string>
+    <string name="enterLoginEndPassword">Введите логин и пароль</string>
+
 </resources>

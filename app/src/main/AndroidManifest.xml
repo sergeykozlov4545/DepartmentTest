@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sergey.departmenttest">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".application.DepartmentsApplicationImpl"
         android:allowBackup="false"
@@ -25,7 +27,8 @@
 
         <activity
             android:name=".feature.login.LoginActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity android:name=".feature.main.MainActivity" />
 
