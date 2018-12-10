@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("Registered")
-class BaseActivity : AppCompatActivity(), CoroutineScope, ErrorView {
+class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView {
 
     private lateinit var job: Job
     private var isCreatedJob = false
