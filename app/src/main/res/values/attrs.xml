@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DotsProgressBar">
+        <attr name="dotRadius" format="dimension" />
+        <attr name="activeDotRadius" format="dimension" />
+        <attr name="paddingDots" format="dimension" />
+        <attr name="colorDot" format="color" />
+        <attr name="countDots" format="integer" />
+        <attr name="durationAnimation" format="integer" />
+        <attr name="animationMode" format="enum">
+            <enum name="onlyRight" value="0" />
+            <enum name="leftRight" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>
