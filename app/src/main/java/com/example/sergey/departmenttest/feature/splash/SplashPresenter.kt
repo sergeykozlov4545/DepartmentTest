@@ -1,10 +1,8 @@
 package com.example.sergey.departmenttest.feature.splash
 
 import com.example.sergey.departmenttest.domain.interactor.AuthorizeInteractor
-import com.example.sergey.departmenttest.extansion.runInCoroutine
 import com.example.sergey.departmenttest.feature.core.BasePresenter
 import com.example.sergey.departmenttest.feature.core.Presenter
-import kotlinx.coroutines.CoroutineScope
 
 interface SplashPresenter : BasePresenter<SplashView> {
     fun loadAuthorizedUser()
@@ -16,31 +14,21 @@ class SplashPresenterImpl(
         private val authorizeInteractor: AuthorizeInteractor
 ) : Presenter<SplashView>(view), SplashPresenter {
 
-    override fun loadAuthorizedUser() {
-        view.takeIf { it is CoroutineScope }
-                ?.also { (it as CoroutineScope).runInCoroutine(this::loadAuthorizedUserAsync) }
-    }
-
-    private suspend fun loadAuthorizedUserAsync() {
+    override fun loadAuthorizedUser() = runInCoroutine {
         view.onGetAuthorizedUser(authorizeInteractor.getAuthorizedUser())
     }
 
-    override fun checkAuthorizedUser() {
-        view.takeIf { it is CoroutineScope }
-                ?.also { (it as CoroutineScope).runInCoroutine(this::checkAuthorizedUserAsync) }
-    }
-
-    private suspend fun checkAuthorizedUserAsync() {
+    override fun checkAuthorizedUser() = runInCoroutine {
         val authorizedUser = authorizeInteractor.getAuthorizedUser()
         if (authorizedUser == null) {
             view.openLoginActivity()
-            return
+            return@runInCoroutine
         }
 
         val status = authorizeInteractor.authorizeUser(authorizedUser.login, authorizedUser.password)
         if (status.isSuccess) {
             view.openMainActivity()
-            return
+            return@runInCoroutine
         }
 
         view.openLoginActivity(authorizedUser, status.message)

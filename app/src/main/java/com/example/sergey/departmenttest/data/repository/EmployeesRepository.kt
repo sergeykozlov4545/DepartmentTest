@@ -2,16 +2,15 @@ package com.example.sergey.departmenttest.data.repository
 
 import com.example.sergey.departmenttest.data.local.PreferenceManager
 import com.example.sergey.departmenttest.data.remote.ServiceApi
-import com.example.sergey.departmenttest.domain.model.AuthorizedUser
-import com.example.sergey.departmenttest.domain.model.Department
-import com.example.sergey.departmenttest.domain.model.Employee
-import com.example.sergey.departmenttest.domain.model.OperationStatus
+import com.example.sergey.departmenttest.domain.model.*
+import com.example.sergey.departmenttest.extansion.between
 
 interface EmployeesRepository {
     suspend fun getAuthorizedUser(): AuthorizedUser?
     suspend fun authorizeUser(login: String, password: String): OperationStatus
 
-    suspend fun getDepartments(): Department?
+    suspend fun getTreeElements(): List<TreeElement>
+    suspend fun toggleDepartmentElement(element: DepartmentElement): List<TreeElement>
     suspend fun getEmployee(id: Long): Employee?
 }
 
@@ -21,7 +20,10 @@ class EmployeesRepositoryImpl(
 ) : EmployeesRepository {
 
     private var authorizedUser: AuthorizedUser? = null
-    private var departments: Department? = null
+
+    private var allEmployees: MutableList<Employee>? = null
+    private var treeElements: MutableList<TreeElement>? = null
+    private var currentVisitedTime: Int = 0
 
     override suspend fun getAuthorizedUser() = authorizedUser.takeIf { it != null }
             ?: run {
@@ -40,30 +42,77 @@ class EmployeesRepositoryImpl(
         return status
     }
 
-    override suspend fun getDepartments() = departments.takeIf { it != null } ?: loadDepartments()
+    override suspend fun getTreeElements() = treeElements.takeIf { it != null }
+            ?.filter(TreeElement::isVisible) ?: loadTreeElements()
 
-    private suspend fun loadDepartments() =
-            authorizedUser.takeIf { it != null }
-                    ?.let { serviceApi.getDepartments(it.login, it.password).await() }
-                    ?.also { departments = it }
-
-    override suspend fun getEmployee(id: Long) = departments.takeIf { it != null }?.let { dfs(it, id) }
-
-    private suspend fun dfs(department: Department, id: Long): Employee? {
-        if (department.subDepartments.isEmpty()) {
-            for (employee in department.employees) {
-                if (employee.id == id) {
-                    return employee
-                }
-            }
-            return null
+    override suspend fun toggleDepartmentElement(element: DepartmentElement): List<TreeElement> {
+        if (element.isOpened) {
+            treeElements.takeIf { it != null }
+                    ?.filter {
+                        it.timeRange.between(element.timeRange)
+                    }?.forEach {
+                        it.isVisible = false
+                        if (it is DepartmentElement) {
+                            it.isOpened = false
+                        }
+                    }
+            element.isVisible = true
+        } else {
+            treeElements.takeIf { it != null }
+                    ?.filter { it.parentVisitedTime == element.timeRange.first }
+                    ?.forEach { it.isVisible = true }
+            element.isOpened = true
         }
+        return treeElements.takeIf { it != null }?.filter(TreeElement::isVisible) ?: emptyList()
+    }
+
+    override suspend fun getEmployee(id: Long) = allEmployees?.find { it.id == id }
+
+    private suspend fun loadTreeElements(): List<TreeElement> {
+        return authorizedUser.takeIf { it != null }
+                ?.let { serviceApi.getDepartments(it.login, it.password).await() }
+                ?.run {
+                    treeElements = mutableListOf()
+                    allEmployees = mutableListOf()
+                    currentVisitedTime = 0
+                    buildTree(this)
+                    treeElements!!.first().isVisible = true
+
+                    return@run treeElements!!.filter(TreeElement::isVisible)
+                } ?: emptyList()
+    }
+
+    private suspend fun buildTree(
+            department: Department,
+            parentVisitedTime: Int = -1,
+            depth: Int = 0
+    ) {
+        val timeStart = currentVisitedTime
+        val departmentElement = DepartmentElement(
+                name = department.name,
+                depth = depth,
+                parentVisitedTime = parentVisitedTime
+        )
+        currentVisitedTime++
+
+        treeElements?.add(departmentElement)
         for (subDepartment in department.subDepartments) {
-            val employee = dfs(subDepartment, id)
-            if (employee != null) {
-                return employee
-            }
+            buildTree(subDepartment, timeStart, depth + 1)
         }
-        return null
+        for (employee in department.employees) {
+            allEmployees?.add(employee)
+
+            val employeeElement = EmployeeElement(
+                    employee = employee,
+                    depth = depth + 1,
+                    timeRange = currentVisitedTime..currentVisitedTime + 1,
+                    parentVisitedTime = timeStart
+            )
+            currentVisitedTime += 2
+            treeElements?.add(employeeElement)
+        }
+
+        departmentElement.timeRange = timeStart..currentVisitedTime
+        currentVisitedTime++
     }
 }

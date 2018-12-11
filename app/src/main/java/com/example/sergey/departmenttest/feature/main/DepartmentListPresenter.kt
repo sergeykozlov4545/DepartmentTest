@@ -1,14 +1,15 @@
 package com.example.sergey.departmenttest.feature.main
 
 import com.example.sergey.departmenttest.domain.interactor.DepartmentsInteractor
-import com.example.sergey.departmenttest.exception.OperationException
-import com.example.sergey.departmenttest.extansion.runInCoroutine
+import com.example.sergey.departmenttest.domain.model.DepartmentElement
+import com.example.sergey.departmenttest.domain.model.EmployeeElement
+import com.example.sergey.departmenttest.domain.model.TreeElement
 import com.example.sergey.departmenttest.feature.core.BasePresenter
 import com.example.sergey.departmenttest.feature.core.Presenter
-import kotlinx.coroutines.CoroutineScope
 
 interface DepartmentListPresenter : BasePresenter<DepartmentListView> {
-    fun loadDepartments()
+    fun loadTreeElements()
+    fun treeElementClicked(treeElement: TreeElement)
 }
 
 class DepartmentListPresenterImpl(
@@ -16,13 +17,18 @@ class DepartmentListPresenterImpl(
         private val departmentsInteractor: DepartmentsInteractor
 ) : Presenter<DepartmentListView>(view), DepartmentListPresenter {
 
-    override fun loadDepartments() {
-        view.takeIf { it is CoroutineScope }
-                ?.also { (it as CoroutineScope).runInCoroutine(this::loadDepartmentsAsync) }
+    override fun loadTreeElements() = runInCoroutine {
+        val elements = departmentsInteractor.getTreeElements()
+        view.onGetTreeElements(elements)
     }
 
-    private suspend fun loadDepartmentsAsync() {
-        departmentsInteractor.getDepartments().takeIf { it != null }
-                ?.run { view.onGetDepartments(this) } ?: throw OperationException()
+    override fun treeElementClicked(treeElement: TreeElement) = runInCoroutine {
+        when (treeElement) {
+            is EmployeeElement -> view.openDetalisationEmployee(treeElement.employee)
+            is DepartmentElement -> {
+                val elements = departmentsInteractor.toggleDepartmentElement(treeElement)
+                view.onGetTreeElements(elements)
+            }
+        }
     }
 }

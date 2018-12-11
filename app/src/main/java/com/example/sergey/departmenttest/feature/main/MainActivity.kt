@@ -5,7 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
-import com.example.sergey.departmenttest.domain.model.Department
+import com.example.sergey.departmenttest.domain.model.Employee
+import com.example.sergey.departmenttest.domain.model.TreeElement
 import com.example.sergey.departmenttest.feature.core.BaseActivity
 
 class MainActivity : BaseActivity(), DepartmentListView {
@@ -27,10 +28,14 @@ class MainActivity : BaseActivity(), DepartmentListView {
 
     override fun onResume() {
         super.onResume()
-        presenter.loadDepartments()
+        presenter.loadTreeElements()
     }
 
-    override fun onGetDepartments(department: Department) {
-        // TODO("not implemented")
+    override fun onGetTreeElements(elements: List<TreeElement>) {
+        // TODO: Обновить адаптер
+    }
+
+    override fun openDetalisationEmployee(employee: Employee) {
+        // TODO: Открыть детализацию
     }
 }
