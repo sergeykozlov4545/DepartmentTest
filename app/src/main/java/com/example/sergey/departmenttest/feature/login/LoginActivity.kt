@@ -42,8 +42,12 @@ class LoginActivity : BaseActivity(), LoginView {
         intent.getStringExtra(BUNDLE_ERROR_MESSAGE).takeIf { !it.isNullOrEmpty() }
                 ?.run { toast(this) }
 
-        loginView.setText("test_user")
-        passwordView.setText("test_pass")
+        intent.getStringExtra(BUNDLE_LOGIN).takeIf { !it.isNullOrEmpty() }?.run {
+            loginView.setText(this)
+        }
+        intent.getStringExtra(BUNDLE_PASSWORD).takeIf { !it.isNullOrEmpty() }?.run {
+            passwordView.setText(this)
+        }
 
         sigInView.setOnClickListener {
             val login = loginView.text.toString().trim()
@@ -65,6 +69,7 @@ class LoginActivity : BaseActivity(), LoginView {
     }
 
     override fun openMainActivity() {
+        progressBar.visibility = View.INVISIBLE
         MainActivity.start(this)
         finish()
     }
