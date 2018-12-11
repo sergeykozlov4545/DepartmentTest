@@ -16,15 +16,16 @@ class LoginPresenterImpl(
         private val authorizeInteractor: AuthorizeInteractor
 ) : Presenter<LoginView>(view), LoginPresenter {
     override fun authorizeUser(login: String, password: String) {
-        val scope = view as? CoroutineScope ?: return
+        view.takeIf { it is CoroutineScope }
+                ?.also { (it as CoroutineScope).runInCoroutine { authorizeUserAsync(login, password) } }
+    }
 
-        scope.runInCoroutine {
-            val status = authorizeInteractor.authorizeUser(login, password)
-            if (status.isSuccess) {
-                view.openMainActivity()
-            } else {
-                throw OperationException(status.message)
-            }
+    private suspend fun authorizeUserAsync(login: String, password: String) {
+        val status = authorizeInteractor.authorizeUser(login, password)
+        if (status.isSuccess) {
+            view.openMainActivity()
+        } else {
+            throw OperationException(status.message)
         }
     }
 }

@@ -3,10 +3,14 @@ package com.example.sergey.departmenttest.feature.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.example.sergey.departmenttest.R
+import com.example.sergey.departmenttest.application.DepartmentsApplication
+import com.example.sergey.departmenttest.domain.interactor.DepartmentListPresenterImpl
+import com.example.sergey.departmenttest.domain.interactor.DepartmentListView
+import com.example.sergey.departmenttest.domain.model.Department
+import com.example.sergey.departmenttest.feature.core.BaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity(), DepartmentListView {
 
     companion object {
         fun start(context: Context) {
@@ -14,8 +18,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val departmentsApplication by lazy { application as DepartmentsApplication }
+
+    private val presenter by lazy { DepartmentListPresenterImpl(this, departmentsApplication.departmentsInteractor) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.loadDepartments()
+    }
+
+    override fun onGetDepartments(department: Department) {
+        // TODO("not implemented")
     }
 }

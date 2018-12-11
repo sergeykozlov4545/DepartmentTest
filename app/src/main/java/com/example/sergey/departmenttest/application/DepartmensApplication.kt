@@ -6,10 +6,13 @@ import com.example.sergey.departmenttest.data.remote.ServiceManagerImpl
 import com.example.sergey.departmenttest.data.repository.EmployeesRepositoryImpl
 import com.example.sergey.departmenttest.domain.interactor.AuthorizeInteractor
 import com.example.sergey.departmenttest.domain.interactor.AuthorizeInteractorImpl
+import com.example.sergey.departmenttest.domain.interactor.DepartmentsInteractor
+import com.example.sergey.departmenttest.domain.interactor.DepartmentsInteractorImpl
 
 
 interface DepartmentsApplication {
     val authorizeInteractor: AuthorizeInteractor
+    val departmentsInteractor: DepartmentsInteractor
 }
 
 class DepartmentsApplicationImpl : Application(), DepartmentsApplication {
@@ -23,7 +26,6 @@ class DepartmentsApplicationImpl : Application(), DepartmentsApplication {
     override val authorizeInteractor: AuthorizeInteractor
         get() = AuthorizeInteractorImpl(employeesRepository)
 
-    override fun onCreate() {
-        super.onCreate()
-    }
+    override val departmentsInteractor: DepartmentsInteractor
+        get() = DepartmentsInteractorImpl(employeesRepository)
 }

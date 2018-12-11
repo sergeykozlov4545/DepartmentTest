@@ -1,6 +1,9 @@
 package com.example.sergey.departmenttest.data.remote
 
+import com.example.sergey.departmenttest.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,8 +20,16 @@ class ServiceManagerImpl : ServiceManager {
     private val retrofit: Retrofit
 
     init {
+        val logger = HttpLoggingInterceptor()
+        logger.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+
+        val client = OkHttpClient.Builder()
+                .addNetworkInterceptor(logger)
+                .build()
+
         retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

@@ -7,6 +7,7 @@ import com.example.sergey.departmenttest.feature.core.Presenter
 import kotlinx.coroutines.CoroutineScope
 
 interface SplashPresenter : BasePresenter<SplashView> {
+    fun loadAuthorizedUser()
     fun checkAuthorizedUser()
 }
 
@@ -15,23 +16,33 @@ class SplashPresenterImpl(
         private val authorizeInteractor: AuthorizeInteractor
 ) : Presenter<SplashView>(view), SplashPresenter {
 
+    override fun loadAuthorizedUser() {
+        view.takeIf { it is CoroutineScope }
+                ?.also { (it as CoroutineScope).runInCoroutine(this::loadAuthorizedUserAsync) }
+    }
+
+    private suspend fun loadAuthorizedUserAsync() {
+        view.onGetAuthorizedUser(authorizeInteractor.getAuthorizedUser())
+    }
+
     override fun checkAuthorizedUser() {
-        val scope = view as? CoroutineScope ?: return
+        view.takeIf { it is CoroutineScope }
+                ?.also { (it as CoroutineScope).runInCoroutine(this::checkAuthorizedUserAsync) }
+    }
 
-        scope.runInCoroutine {
-            val authorizedUser = authorizeInteractor.getAuthorizedUser()
-            if (authorizedUser == null) {
-                view.openLoginActivity()
-                return@runInCoroutine
-            }
-
-            val status = authorizeInteractor.authorizeUser(authorizedUser.login, authorizedUser.password)
-            if (status.isSuccess) {
-                view.openMainActivity()
-                return@runInCoroutine
-            }
-
-            view.openLoginActivity(authorizedUser, status.message)
+    private suspend fun checkAuthorizedUserAsync() {
+        val authorizedUser = authorizeInteractor.getAuthorizedUser()
+        if (authorizedUser == null) {
+            view.openLoginActivity()
+            return
         }
+
+        val status = authorizeInteractor.authorizeUser(authorizedUser.login, authorizedUser.password)
+        if (status.isSuccess) {
+            view.openMainActivity()
+            return
+        }
+
+        view.openLoginActivity(authorizedUser, status.message)
     }
 }
