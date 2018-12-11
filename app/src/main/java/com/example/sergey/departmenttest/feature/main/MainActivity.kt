@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
-import com.example.sergey.departmenttest.domain.interactor.DepartmentListPresenterImpl
-import com.example.sergey.departmenttest.domain.interactor.DepartmentListView
 import com.example.sergey.departmenttest.domain.model.Department
 import com.example.sergey.departmenttest.feature.core.BaseActivity
 

@@ -1,4 +1,4 @@
-package com.example.sergey.departmenttest.domain.interactor
+package com.example.sergey.departmenttest.feature.main
 
 import com.example.sergey.departmenttest.domain.model.Department
 import com.example.sergey.departmenttest.feature.core.BaseView
