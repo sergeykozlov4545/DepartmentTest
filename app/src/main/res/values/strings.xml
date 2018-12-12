@@ -10,4 +10,18 @@
     <string name="sigIn">Войти</string>
     <string name="enterLoginEndPassword">Введите логин и пароль</string>
 
+    <!--EmployeeDetailsActivity-->
+    <string name="invalidEmployeeId">Неправильный идентификатор сотрудника. Попробуйте открыть еще раз.</string>
+    <string name="employeeTitleFmt">Должность: %s</string>
+    <string name="employeePhoneFmt">Телефон: %s</string>
+    <string name="employeeEmailFmt">email: %s</string>
+    <string name="missing">Отсутствует</string>
+    <string name="phoneMissing">Телефон отсутствует</string>
+    <string name="emailMissing">Email отсутствует</string>
+
+    <string name="chooseDialer">Выберите программу для звонка</string>
+    <string name="invalidChooseDialer">У вас нет программ для звонка</string>
+    <string name="chooseSender">Выберите программу для отправки</string>
+    <string name="invalidChooseSender">У вас нет программ для отправки</string>
+
 </resources>

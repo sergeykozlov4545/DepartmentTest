@@ -7,6 +7,7 @@ import com.example.sergey.departmenttest.feature.core.Presenter
 
 interface DetailsPresenter : BasePresenter<DetailsView> {
     fun loadEmployee(id: Long)
+    fun loadEmployeePhoto(id: Long)
 }
 
 class DetailsPresenterImpl(
@@ -18,5 +19,11 @@ class DetailsPresenterImpl(
         val employee = departmentsInteractor.getEmployee(id)
         employee.takeIf { it != null }
                 ?.run { view.onGetEmployee(this) } ?: throw OperationException()
+    }
+
+    override fun loadEmployeePhoto(id: Long) = runInCoroutine {
+        val downloadImage = departmentsInteractor.getEmployeePhoto(id)
+        downloadImage.takeIf { it != null }
+                ?.run { view.onGetEmployeePhoto(this) }
     }
 }

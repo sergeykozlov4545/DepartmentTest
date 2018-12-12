@@ -11,6 +11,7 @@ import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.domain.model.Employee
 import com.example.sergey.departmenttest.domain.model.TreeElement
 import com.example.sergey.departmenttest.feature.core.BaseFragment
+import com.example.sergey.departmenttest.feature.main.MainView
 import com.example.sergey.departmenttest.feature.treeView.ItemAdapter
 import kotlinx.android.synthetic.main.fragment_department_list.*
 
@@ -68,6 +69,7 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
     }
 
     override fun openDetailsScreen(employee: Employee) {
-        // TODO: Открыть детализацию
+        activity.takeIf { it is MainView }
+                ?.let { (it as MainView).openDetailsScreen(employee) }
     }
 }

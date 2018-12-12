@@ -32,6 +32,8 @@
 
         <activity android:name=".feature.main.MainActivity" />
 
+        <activity android:name=".feature.employeeDetails.EmployeeDetailsActivity" />
+
     </application>
 
 </manifest>

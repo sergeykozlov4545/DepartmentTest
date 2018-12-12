@@ -11,7 +11,9 @@ interface EmployeesRepository {
 
     suspend fun getTreeElements(): List<TreeElement>
     suspend fun toggleDepartmentElement(element: DepartmentElement): List<TreeElement>
+
     suspend fun getEmployee(id: Long): Employee?
+    suspend fun getEmployeePhoto(employeeId: Long): DownloadImage?
 }
 
 class EmployeesRepositoryImpl(
@@ -67,6 +69,12 @@ class EmployeesRepositoryImpl(
     }
 
     override suspend fun getEmployee(id: Long) = allEmployees?.find { it.id == id }
+
+    override suspend fun getEmployeePhoto(employeeId: Long): DownloadImage? {
+        return authorizedUser.takeIf { it != null }
+                ?.let { serviceApi.getEmployeePhoto(it.login, it.password, employeeId).await() }
+                ?.let { DownloadImage(it.byteStream()) }
+    }
 
     private suspend fun loadTreeElements(): List<TreeElement> {
         return authorizedUser.takeIf { it != null }
