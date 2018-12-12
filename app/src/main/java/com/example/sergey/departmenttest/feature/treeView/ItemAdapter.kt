@@ -1,4 +1,4 @@
-package com.example.sergey.departmenttest.feature.main.treeView
+package com.example.sergey.departmenttest.feature.treeView
 
 import android.graphics.drawable.Drawable
 import android.support.constraint.ConstraintLayout

@@ -6,19 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".feature.main.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/listContainer"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/treeListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <com.example.sergey.departmenttest.feature.dotsProgressBar.DotsProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:activeDotRadius="8dp"
+        app:animationMode="leftRight"
+        app:colorDot="@android:color/darker_gray"
+        app:countDots="4"
+        app:dotRadius="5dp"
+        app:durationAnimation="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/treeListView"
+        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>

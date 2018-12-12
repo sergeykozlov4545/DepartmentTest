@@ -1,4 +1,4 @@
-package com.example.sergey.departmenttest.feature.main
+package com.example.sergey.departmenttest.feature.departmentList
 
 import com.example.sergey.departmenttest.domain.interactor.DepartmentsInteractor
 import com.example.sergey.departmenttest.domain.model.DepartmentElement
@@ -24,7 +24,7 @@ class DepartmentListPresenterImpl(
 
     override fun treeElementClicked(treeElement: TreeElement) = runInCoroutine {
         when (treeElement) {
-            is EmployeeElement -> view.openDetalisationEmployee(treeElement.employee)
+            is EmployeeElement -> view.openDetailsScreen(treeElement.employee)
             is DepartmentElement -> {
                 val elements = departmentsInteractor.toggleDepartmentElement(treeElement)
                 view.onGetTreeElements(elements)

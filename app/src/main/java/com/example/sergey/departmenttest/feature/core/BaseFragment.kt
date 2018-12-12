@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import java.io.IOException
 import kotlin.coroutines.CoroutineContext
 
-class BaseFragment : Fragment(), CoroutineScope, BaseView {
+open class BaseFragment : Fragment(), CoroutineScope, BaseView {
 
     private lateinit var job: Job
     private var isCreatedJob = false

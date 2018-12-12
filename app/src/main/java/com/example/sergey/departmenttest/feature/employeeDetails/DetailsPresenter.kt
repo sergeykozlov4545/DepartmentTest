@@ -1,18 +1,18 @@
-package com.example.sergey.departmenttest.feature.main
+package com.example.sergey.departmenttest.feature.employeeDetails
 
 import com.example.sergey.departmenttest.domain.interactor.DepartmentsInteractor
 import com.example.sergey.departmenttest.exception.OperationException
 import com.example.sergey.departmenttest.feature.core.BasePresenter
 import com.example.sergey.departmenttest.feature.core.Presenter
 
-interface DepartmentPresenter : BasePresenter<DepartmentView> {
+interface DetailsPresenter : BasePresenter<DetailsView> {
     fun loadEmployee(id: Long)
 }
 
-class DepartmentPresenterImpl(
-        override val view: DepartmentView,
+class DetailsPresenterImpl(
+        override val view: DetailsView,
         private val departmentsInteractor: DepartmentsInteractor
-) : Presenter<DepartmentView>(view), DepartmentPresenter {
+) : Presenter<DetailsView>(view), DetailsPresenter {
 
     override fun loadEmployee(id: Long) = runInCoroutine {
         val employee = departmentsInteractor.getEmployee(id)
