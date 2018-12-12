@@ -1,54 +1,30 @@
 package com.example.sergey.departmenttest.feature.main.treeView
 
 import android.graphics.drawable.Drawable
+import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.domain.model.Department
-import com.example.sergey.departmenttest.domain.model.Employee
+import com.example.sergey.departmenttest.domain.model.DepartmentElement
+import com.example.sergey.departmenttest.domain.model.EmployeeElement
+import com.example.sergey.departmenttest.domain.model.TreeElement
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_department.*
 
-typealias EmployeeClick = (employee: Employee) -> Unit
-typealias DepartmentClick = (department: Department) -> Unit
-
-interface ItemCallback {
-    fun getTitle(): String
-    fun getSubItems(): List<Item> = emptyList()
-}
-
-sealed class Item(depth: Int = 0) : ItemCallback
-
-class DepartmentItem(val department: Department, var opened: Boolean = false) : Item() {
-    override fun getTitle() = department.name
-
-    override fun getSubItems(): List<Item> {
-        if (department.subDepartments.isEmpty()
-                && department.employees.isEmpty()) {
-            return emptyList()
-        }
-        if (department.subDepartments.isNotEmpty()) {
-            return department.subDepartments.map { DepartmentItem(it) }
-        }
-        return department.employees.map { EmployeeItem(it) }
-    }
-}
-
-class EmployeeItem(val employee: Employee) : Item() {
-    override fun getTitle() = employee.name
-}
+typealias ItemClick = (treeElement: TreeElement) -> Unit
 
 class ItemAdapter : RecyclerView.Adapter<ItemHolder>() {
-
-    var departmentClick: DepartmentClick? = null
-    var employeeClick: EmployeeClick? = null
-    var data: List<Item> = emptyList()
+    var itemClick: ItemClick? = null
+    var data: List<TreeElement> = emptyList()
         set(value) {
+            val diffResult = DiffUtil.calculateDiff(ItemDiffUtilCallback(data, value))
             field = value
-            notifyDataSetChanged()
+            diffResult.dispatchUpdatesTo(this)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemHolder(
@@ -59,8 +35,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemHolder>() {
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.employeeClick = employeeClick
-        holder.departmentClick = departmentClick
+        holder.itemClick = itemClick
         holder.data = data[position]
     }
 }
@@ -69,26 +44,22 @@ class ItemHolder(
         override val containerView: View
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    private val innerDepartmentClick: DepartmentClick = {
-        departmentClick?.invoke(it)
-    }
+    var itemClick: ItemClick? = null
 
-    var departmentClick: DepartmentClick? = null
-    var employeeClick: EmployeeClick? = null
-
-    var data: Item? = null
+    var data: TreeElement? = null
         set(value) {
             configIcon(value)
 
+            nameView.text = getName(value)
             itemView.setOnClickListener {
-                when (value) {
-                    is DepartmentItem -> innerDepartmentClick(value.department)
-                    is EmployeeItem -> employeeClick?.invoke(value.employee)
-                }
+                value.takeIf { element -> element != null }
+                        ?.let { element -> itemClick?.invoke(element) }
             }
+
+            configLeftMargin(value)
         }
 
-    private fun configIcon(value: Item?) {
+    private fun configIcon(value: TreeElement?) {
         getDrawable(value).takeIf { it != null }
                 ?.let {
                     iconView.setImageDrawable(it)
@@ -96,14 +67,51 @@ class ItemHolder(
                 } ?: run { iconView.visibility = View.INVISIBLE }
     }
 
-    private fun getDrawable(value: Item?): Drawable? {
+    private fun getDrawable(value: TreeElement?): Drawable? {
         if (value == null) return null
         val drawableId = when (value) {
-            is DepartmentItem ->
-                if (value.opened) R.drawable.ic_expand_more_black_24dp
+            is DepartmentElement ->
+                if (value.isOpened) R.drawable.ic_expand_more_black_24dp
                 else R.drawable.ic_chevron_right_black_24dp
-            is EmployeeItem -> R.drawable.ic_person_black_24dp
+            is EmployeeElement -> R.drawable.ic_person_black_24dp
         }
         return ContextCompat.getDrawable(itemView.context, drawableId)
     }
+
+    private fun getName(value: TreeElement?): String {
+        return when (value) {
+            is DepartmentElement -> value.name
+            is EmployeeElement -> value.employee.name
+            else -> ""
+        }
+    }
+
+    private fun configLeftMargin(value: TreeElement?) {
+        val depth = value?.depth ?: 0
+
+        with(ConstraintLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)) {
+            val dm = itemView.context.resources.displayMetrics
+            val leftMargin = TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f * depth, dm).toInt()
+            setMargins(leftMargin, topMargin, rightMargin, bottomMargin)
+            itemView.layoutParams = this
+        }
+    }
+}
+
+class ItemDiffUtilCallback(
+        private val oldData: List<TreeElement>,
+        private val newData: List<TreeElement>
+) : DiffUtil.Callback() {
+
+    override fun getOldListSize() = oldData.size
+
+    override fun getNewListSize() = newData.size
+
+    override fun areItemsTheSame(oldPosition: Int, newPosition: Int) =
+            oldData[oldPosition].id == newData[newPosition].id
+
+    override fun areContentsTheSame(oldPosition: Int, newPosition: Int) = false
+
 }

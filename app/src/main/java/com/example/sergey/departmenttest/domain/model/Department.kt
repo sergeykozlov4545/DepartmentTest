@@ -1,8 +1,10 @@
 package com.example.sergey.departmenttest.domain.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Department(
-    val id: Long = 0,
-    val name: String = "",
-    val subDepartments: List<Department> = emptyList(),
-    val employees: List<Employee> = emptyList()
+        @SerializedName("ID") val id: Long = 0,
+        @SerializedName("Name") val name: String = "",
+        @SerializedName("Departments") val subDepartments: List<Department> = emptyList(),
+        @SerializedName("Employees") val employees: List<Employee> = emptyList()
 )

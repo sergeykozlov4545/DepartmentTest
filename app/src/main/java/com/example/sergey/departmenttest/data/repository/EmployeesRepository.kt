@@ -59,7 +59,7 @@ class EmployeesRepositoryImpl(
             element.isVisible = true
         } else {
             treeElements.takeIf { it != null }
-                    ?.filter { it.parentVisitedTime == element.timeRange.first }
+                    ?.filter { it.parentId == element.id }
                     ?.forEach { it.isVisible = true }
             element.isOpened = true
         }
@@ -84,29 +84,31 @@ class EmployeesRepositoryImpl(
 
     private suspend fun buildTree(
             department: Department,
-            parentVisitedTime: Int = -1,
+            parentId: String = "",
             depth: Int = 0
     ) {
         val timeStart = currentVisitedTime
         val departmentElement = DepartmentElement(
+                id = department.id,
                 name = department.name,
                 depth = depth,
-                parentVisitedTime = parentVisitedTime
+                parentId = parentId
         )
         currentVisitedTime++
 
         treeElements?.add(departmentElement)
         for (subDepartment in department.subDepartments) {
-            buildTree(subDepartment, timeStart, depth + 1)
+            buildTree(subDepartment, departmentElement.id, depth + 1)
         }
         for (employee in department.employees) {
             allEmployees?.add(employee)
 
             val employeeElement = EmployeeElement(
+                    id = employee.id,
                     employee = employee,
                     depth = depth + 1,
                     timeRange = currentVisitedTime..currentVisitedTime + 1,
-                    parentVisitedTime = timeStart
+                    parentId = departmentElement.id
             )
             currentVisitedTime += 2
             treeElements?.add(employeeElement)
