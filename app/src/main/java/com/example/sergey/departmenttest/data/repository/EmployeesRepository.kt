@@ -11,7 +11,9 @@ interface EmployeesRepository {
 
     suspend fun getTreeElements(): List<TreeElement>
     suspend fun toggleDepartmentElement(element: DepartmentElement): List<TreeElement>
+
     suspend fun getEmployee(id: Long): Employee?
+    suspend fun getEmployeePhoto(employeeId: Long): DownloadImage?
 }
 
 class EmployeesRepositoryImpl(
@@ -24,6 +26,8 @@ class EmployeesRepositoryImpl(
     private var allEmployees: MutableList<Employee>? = null
     private var treeElements: MutableList<TreeElement>? = null
     private var currentVisitedTime: Int = 0
+
+    private val imageCache: MutableMap<Long, DownloadImage> = HashMap()
 
     override suspend fun getAuthorizedUser() = authorizedUser.takeIf { it != null }
             ?: run {
@@ -67,6 +71,17 @@ class EmployeesRepositoryImpl(
     }
 
     override suspend fun getEmployee(id: Long) = allEmployees?.find { it.id == id }
+
+    override suspend fun getEmployeePhoto(employeeId: Long): DownloadImage? {
+        return imageCache[employeeId]
+                ?: authorizedUser.takeIf { it != null }
+                        ?.let { serviceApi.getEmployeePhoto(it.login, it.password, employeeId).await() }
+                        ?.run {
+                            val image = DownloadImage(bytes())
+                            imageCache[employeeId] = image
+                            return@run image
+                        }
+    }
 
     private suspend fun loadTreeElements(): List<TreeElement> {
         return authorizedUser.takeIf { it != null }

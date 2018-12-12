@@ -16,7 +16,11 @@ class DetailsPresenterImpl(
 
     override fun loadEmployee(id: Long) = runInCoroutine {
         val employee = departmentsInteractor.getEmployee(id)
-        employee.takeIf { it != null }
-                ?.run { view.onGetEmployee(this) } ?: throw OperationException()
+        val downloadImage = departmentsInteractor.getEmployeePhoto(id)
+
+        if (employee == null || downloadImage == null) {
+            throw OperationException()
+        }
+        view.onGetEmployee(employee, downloadImage)
     }
 }

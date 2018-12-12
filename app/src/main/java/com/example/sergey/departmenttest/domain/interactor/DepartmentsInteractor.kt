@@ -2,6 +2,7 @@ package com.example.sergey.departmenttest.domain.interactor
 
 import com.example.sergey.departmenttest.data.repository.EmployeesRepository
 import com.example.sergey.departmenttest.domain.model.DepartmentElement
+import com.example.sergey.departmenttest.domain.model.DownloadImage
 import com.example.sergey.departmenttest.domain.model.Employee
 import com.example.sergey.departmenttest.domain.model.TreeElement
 
@@ -9,6 +10,7 @@ interface DepartmentsInteractor {
     suspend fun getTreeElements(): List<TreeElement>
     suspend fun toggleDepartmentElement(element: DepartmentElement): List<TreeElement>
     suspend fun getEmployee(id: Long): Employee?
+    suspend fun getEmployeePhoto(id: Long): DownloadImage?
 }
 
 class DepartmentsInteractorImpl(
@@ -19,4 +21,5 @@ class DepartmentsInteractorImpl(
             employeesRepository.toggleDepartmentElement(element)
 
     override suspend fun getEmployee(id: Long) = employeesRepository.getEmployee(id)
+    override suspend fun getEmployeePhoto(id: Long) = employeesRepository.getEmployeePhoto(id)
 }
