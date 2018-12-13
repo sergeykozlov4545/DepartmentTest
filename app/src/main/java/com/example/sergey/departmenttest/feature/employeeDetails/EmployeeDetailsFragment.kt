@@ -15,6 +15,7 @@ import com.example.sergey.departmenttest.domain.model.DownloadImage
 import com.example.sergey.departmenttest.domain.model.Employee
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseFragment
+import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
 import kotlinx.android.synthetic.main.fragment_employee_details.*
 
 class EmployeeDetailsFragment : BaseFragment(), DetailsView {
@@ -91,9 +92,9 @@ class EmployeeDetailsFragment : BaseFragment(), DetailsView {
     override fun onGetEmployee(employee: Employee, downloadImage: DownloadImage) {
         this.employee = employee
 
+        (activity as? ToolbarCallback)?.updateTitle(employee.name)
         photoView.setImageBitmap(
                 BitmapFactory.decodeByteArray(downloadImage.byteArray, 0, downloadImage.byteArray.size))
-        nameView.text = employee.name
         titleView.text = getString(R.string.employeeTitleFmt, employee.title)
         phoneView.text = getString(R.string.employeePhoneFmt, getPhoneValue(employee))
         emailView.text = getString(R.string.employeeEmailFmt, getEmailValue(employee))

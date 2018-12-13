@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DepartmentTest</string>
+    <string name="appName">AddressBook</string>
 
     <string name="connectionError">Ошибка сети</string>
     <string name="retryOperation">Произошла ошибка. Повторите операцию позднее.</string>
@@ -9,6 +9,9 @@
     <string name="PasswordViewHint">Пароль</string>
     <string name="sigIn">Войти</string>
     <string name="enterLoginEndPassword">Введите логин и пароль</string>
+
+    <!--MainActivity-->
+    <string name="mainActivityTitle">Список отделов</string>
 
     <!--EmployeeDetailsActivity-->
     <string name="invalidEmployeeId">Неправильный идентификатор сотрудника. Попробуйте открыть еще раз.</string>

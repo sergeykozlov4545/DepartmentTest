@@ -2,9 +2,12 @@ package com.example.sergey.departmenttest.feature.core
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.extansion.toast
+import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,7 +15,7 @@ import java.io.IOException
 import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView {
+open class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView, ToolbarCallback {
 
     private lateinit var job: Job
     private var isCreatedJob = false
@@ -38,5 +41,14 @@ open class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView {
             else -> exception.message
         }
         toast(message!!)
+    }
+
+    override fun setBackAction(drawableId: Int, action: () -> Unit) {
+        toolbarView.navigationIcon = ContextCompat.getDrawable(this, drawableId)
+        toolbarView.setNavigationOnClickListener { action() }
+    }
+
+    override fun updateTitle(title: String) {
+        titleView.text = title
     }
 }

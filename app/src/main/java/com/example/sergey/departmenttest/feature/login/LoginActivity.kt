@@ -38,6 +38,7 @@ class LoginActivity : BaseActivity(), LoginView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        updateTitle(getString(R.string.appName))
 
         intent.getStringExtra(BUNDLE_ERROR_MESSAGE).takeIf { !it.isNullOrEmpty() }
                 ?.run { toast(this) }

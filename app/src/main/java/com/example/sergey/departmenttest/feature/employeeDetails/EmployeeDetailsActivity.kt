@@ -24,6 +24,7 @@ class EmployeeDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_employee_details)
+        setBackAction(R.drawable.ic_arrow_back_white_24dp) { onBackPressed() }
 
         employeeId = intent.getLongExtra(EXTRA_EMPLOYEE_ID, 0L)
         if (employeeId == 0L) {
