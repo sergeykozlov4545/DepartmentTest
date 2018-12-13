@@ -1,4 +1,4 @@
-package com.example.sergey.departmenttest.feature.dotsProgressBar
+package com.example.sergey.departmenttest.feature.animation
 
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
@@ -9,7 +9,7 @@ interface AnimationCallback {
     fun applyTransformation()
 }
 
-class DotsAnimation(
+class RepeatableAnimation(
         animationDuration: Int,
         private var animationCallback: AnimationCallback? = null
 ) : Animation() {
@@ -34,6 +34,7 @@ class DotsAnimation(
         super.applyTransformation(interpolatedTime, t)
         animationCallback?.applyTransformation()
     }
+
     fun detach() {
         animationCallback = null
     }

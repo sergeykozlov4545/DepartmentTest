@@ -23,12 +23,11 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onResume() {
         super.onResume()
-        presenter.checkAuthorizedUser()
+//        presenter.checkAuthorizedUser()
     }
 
     override fun onError(exception: Exception) {
         super.onError(exception)
-        progressBar.visibility = View.GONE
         presenter.loadAuthorizedUser()
     }
 

@@ -8,6 +8,8 @@ import android.support.annotation.ColorRes
 import android.util.AttributeSet
 import android.view.View
 import com.example.sergey.departmenttest.R
+import com.example.sergey.departmenttest.feature.animation.AnimationCallback
+import com.example.sergey.departmenttest.feature.animation.RepeatableAnimation
 
 class DotsProgressBar @JvmOverloads constructor(
         context: Context,
@@ -34,7 +36,7 @@ class DotsProgressBar @JvmOverloads constructor(
     private val countDots: Int
     private var activeDotsPosition = 0
 
-    private var animation: DotsAnimation? = null
+    private var animation: RepeatableAnimation? = null
     private val durationAnimation: Int
 
     private var positionDelta = 1
@@ -131,7 +133,7 @@ class DotsProgressBar @JvmOverloads constructor(
 
     private fun startAnimation() {
         if (animation != null) return
-        animation = DotsAnimation(durationAnimation, this)
+        animation = RepeatableAnimation(durationAnimation, this)
         startAnimation(animation)
     }
 

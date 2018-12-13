@@ -3,6 +3,7 @@
 
     <string name="connectionError">Ошибка сети</string>
     <string name="retryOperation">Произошла ошибка. Повторите операцию позднее.</string>
+    <string name="loading">Загрузка…</string>
 
     <!--LoginActivity-->
     <string name="loginViewHint">Логин</string>
