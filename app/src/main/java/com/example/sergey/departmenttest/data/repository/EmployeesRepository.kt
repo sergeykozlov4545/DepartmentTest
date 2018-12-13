@@ -4,6 +4,7 @@ import com.example.sergey.departmenttest.data.local.PreferenceManager
 import com.example.sergey.departmenttest.data.remote.ServiceApi
 import com.example.sergey.departmenttest.domain.model.*
 import com.example.sergey.departmenttest.extansion.between
+import kotlinx.coroutines.delay
 
 interface EmployeesRepository {
     suspend fun getAuthorizedUser(): AuthorizedUser?
@@ -43,6 +44,7 @@ class EmployeesRepositoryImpl(
             preferenceManager.putString("login", login)
             preferenceManager.putString("password", password)
         }
+        delay(2000L)
         return status
     }
 
