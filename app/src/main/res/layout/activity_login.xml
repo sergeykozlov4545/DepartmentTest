@@ -86,7 +86,7 @@
                 app:colorDot="@android:color/darker_gray"
                 app:countDots="4"
                 app:dotRadius="5dp"
-                app:durationAnimation="100"
+                app:durationAnimation="250"
                 app:layout_constraintBottom_toTopOf="@+id/sigInView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
