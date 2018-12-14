@@ -50,6 +50,9 @@ class LoginActivity : BaseActivity(), LoginView {
             passwordView.setText(this)
         }
 
+        loginView.setText("test_user")
+        passwordView.setText("test_pass")
+
         sigInView.setOnClickListener {
             val login = loginView.text.toString().trim()
             val password = passwordView.text.toString().trim()

@@ -14,6 +14,7 @@
     <!--MainActivity-->
     <string name="mainActivityTitle">Список отделов</string>
     <string name="menuLogoutTitle">Выйти</string>
+    <string name="changeEmployee">Выберите сотрудника слева</string>
 
     <!--LogoutDialog-->
     <string name="logoutDialogTitle">Сообщение</string>
