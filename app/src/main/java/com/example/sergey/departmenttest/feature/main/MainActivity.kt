@@ -12,6 +12,7 @@ import com.example.sergey.departmenttest.feature.core.BaseActivity
 import com.example.sergey.departmenttest.feature.departmentList.DepartmentListFragment
 import com.example.sergey.departmenttest.feature.employeeDetails.EmployeeDetailsActivity
 import com.example.sergey.departmenttest.feature.employeeDetails.EmployeeDetailsFragment
+import com.example.sergey.departmenttest.feature.exit.ExitDialogFragment
 import com.example.sergey.departmenttest.feature.login.LoginActivity
 import com.example.sergey.departmenttest.feature.logout.LogoutDialog
 import kotlinx.android.synthetic.main.activity_main.*
@@ -68,10 +69,11 @@ class MainActivity : BaseActivity(), MainView {
     override fun onBackPressed() {
         if (isValidEmployeeId(selectedEmployeeId)) {
             updateTitle(getString(R.string.mainActivityTitle))
+            selectedEmployeeId = 0
             openNoSelectedEmployeeFragment()
             return
         }
-        super.onBackPressed()
+        ExitDialogFragment.open(supportFragmentManager)
     }
 
     override fun openDetailsScreen(employee: Employee) {
