@@ -15,6 +15,12 @@
     <string name="mainActivityTitle">Список отделов</string>
     <string name="menuLogoutTitle">Выйти</string>
 
+    <!--LogoutDialog-->
+    <string name="logoutDialogTitle">Сообщение</string>
+    <string name="logoutDialogMessage">Забыть логин и выйти?</string>
+    <string name="logoutDialogPositive">Да</string>
+    <string name="logoutDialogNegative">Отмена</string>
+
     <!--EmployeeDetailsActivity-->
     <string name="invalidEmployeeId">Неправильный идентификатор сотрудника. Попробуйте открыть еще раз.</string>
     <string name="employeeTitleFmt">Должность: %s</string>
