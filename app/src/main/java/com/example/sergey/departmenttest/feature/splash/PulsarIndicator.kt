@@ -82,19 +82,22 @@ class PulsarIndicator @JvmOverloads constructor(
     }
 
     private fun createAllAnimators() {
-        layers.forEach {
-            animators.add(AlphaAnimatorFactory.create(it))
-            animators.add(
-                    RadiusAnimatorFactory.create(it).apply {
-                        addUpdateListener { invalidate() }
+        layers.forEachIndexed { index, layer ->
+            animators.add(AlphaAnimatorFactory.create(layer))
+
+            val radiusAnimator = RadiusAnimatorFactory.create(layer).apply {
+                if (index == 0) {
+                    addUpdateListener { invalidate() }
+                    return@apply
+                }
+                if (index == layers.lastIndex) {
+                    addRestartedListener {
+                        stopAnimation()
+                        startAnimation()
                     }
-            )
-        }
-        if (animators.isNotEmpty()) {
-            animators.last().addRestartedListener {
-                stopAnimation()
-                startAnimation()
+                }
             }
+            animators.add(radiusAnimator)
         }
     }
 
