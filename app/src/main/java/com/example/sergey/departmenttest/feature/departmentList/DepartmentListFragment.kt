@@ -65,7 +65,6 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
     }
 
     override fun openDetailsScreen(employee: Employee) {
-        activity.takeIf { it is MainView }
-                ?.let { (it as MainView).openDetailsScreen(employee) }
+        (activity as? MainView)?.openDetailsScreen(employee)
     }
 }

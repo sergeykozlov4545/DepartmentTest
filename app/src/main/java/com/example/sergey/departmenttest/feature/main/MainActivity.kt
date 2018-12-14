@@ -92,7 +92,7 @@ class MainActivity : BaseActivity(), MainView {
             toast(getString(R.string.invalidEmployeeId))
             return
         }
-        if (selectedEmployeeId == employee.id) {
+        if (isTablet() && selectedEmployeeId == employee.id) {
             return
         }
         selectedEmployeeId = employee.id
