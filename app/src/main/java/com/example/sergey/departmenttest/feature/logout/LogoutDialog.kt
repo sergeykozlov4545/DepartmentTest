@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
+import com.example.sergey.departmenttest.extansion.openDialog
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.main.MainView
 import kotlinx.coroutines.CoroutineScope
@@ -19,13 +20,9 @@ class LogoutDialog : DialogFragment(), LogoutView, CoroutineScope {
 
     companion object {
         private const val TAG = "logout_dialog"
+
         fun open(fragmentManager: FragmentManager) {
-            if (fragmentManager.isStateSaved) {
-                return
-            }
-            LogoutDialog().run {
-                show(fragmentManager, TAG)
-            }
+            fragmentManager.openDialog(TAG) { LogoutDialog() }
         }
     }
 

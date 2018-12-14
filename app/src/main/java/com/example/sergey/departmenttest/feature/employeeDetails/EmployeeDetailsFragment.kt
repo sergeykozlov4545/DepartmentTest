@@ -13,6 +13,7 @@ import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.domain.model.DownloadImage
 import com.example.sergey.departmenttest.domain.model.Employee
+import com.example.sergey.departmenttest.extansion.open
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseFragment
 import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
@@ -21,21 +22,13 @@ import kotlinx.android.synthetic.main.fragment_employee_details.*
 class EmployeeDetailsFragment : BaseFragment(), DetailsView {
 
     companion object {
-        private const val TAG = "employee_details_fragment"
+        const val TAG = "employee_details_fragment"
         private const val BUNDLE_EMPLOYEE_ID = "employee_id"
 
-        fun open(fragmentManager: FragmentManager, containerId: Int, employeeId: Long) {
-            if (fragmentManager.isStateSaved) {
-                return
-            }
+        fun open(fragmentManager: FragmentManager, containerId: Int, employeeId: Long) =
+                fragmentManager.open(containerId, getFragment(employeeId), TAG)
 
-            val fragment = createFragment(employeeId)
-            fragmentManager.beginTransaction()
-                    .replace(containerId, fragment, TAG)
-                    .commit()
-        }
-
-        private fun createFragment(employeeId: Long) = EmployeeDetailsFragment().apply {
+        private fun getFragment(employeeId: Long) = EmployeeDetailsFragment().apply {
             arguments = Bundle().apply {
                 putLong(BUNDLE_EMPLOYEE_ID, employeeId)
             }
@@ -94,7 +87,8 @@ class EmployeeDetailsFragment : BaseFragment(), DetailsView {
 
         (activity as? ToolbarCallback)?.updateTitle(employee.name)
         photoView.setImageBitmap(
-                BitmapFactory.decodeByteArray(downloadImage.byteArray, 0, downloadImage.byteArray.size))
+                BitmapFactory.decodeByteArray(downloadImage.byteArray, 0, downloadImage.byteArray.size)
+        )
         titleView.text = getString(R.string.employeeTitleFmt, employee.title)
         phoneView.text = getString(R.string.employeePhoneFmt, getPhoneValue(employee))
         emailView.text = getString(R.string.employeeEmailFmt, getEmailValue(employee))

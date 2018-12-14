@@ -9,23 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.sergey.departmenttest.R
+import com.example.sergey.departmenttest.extansion.open
 import com.example.sergey.departmenttest.feature.core.BaseFragment
 
 class NoSelectedEmployeeFragment : BaseFragment() {
 
     companion object {
-        private const val TAG = "no_selected_employee_fragment"
+        const val TAG = "no_selected_employee_fragment"
 
-        fun open(fragmentManager: FragmentManager, containerId: Int) {
-            if (fragmentManager.isStateSaved) {
-                return
-            }
+        fun open(fragmentManager: FragmentManager, containerId: Int) =
+                fragmentManager.open(containerId, getFragment(fragmentManager), TAG)
 
-            val fragment = fragmentManager.findFragmentByTag(TAG) ?: NoSelectedEmployeeFragment()
-            fragmentManager.beginTransaction()
-                    .replace(containerId, fragment, TAG)
-                    .commit()
-        }
+        private fun getFragment(fragmentManager: FragmentManager) =
+                fragmentManager.findFragmentByTag(TAG) ?: NoSelectedEmployeeFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.domain.model.Employee
+import com.example.sergey.departmenttest.extansion.close
 import com.example.sergey.departmenttest.extansion.isTablet
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseActivity
@@ -52,11 +53,21 @@ class MainActivity : BaseActivity(), MainView {
         if (!isTablet()) {
             return
         }
-        if (isValidEmployeeId(selectedEmployeeId)) {
-            openEmployeeDetailsFragment(selectedEmployeeId)
+        if (isNotValidEmployeeId(selectedEmployeeId)) {
+            openNoSelectedEmployeeFragment()
             return
         }
-        openNoSelectedEmployeeFragment()
+        openEmployeeDetailsFragment(selectedEmployeeId)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        supportFragmentManager.close(DepartmentListFragment.TAG)
+        if (isValidEmployeeId(selectedEmployeeId)) {
+            supportFragmentManager.close(EmployeeDetailsFragment.TAG)
+        } else {
+            supportFragmentManager.close(NoSelectedEmployeeFragment.TAG)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -67,7 +78,7 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     override fun onBackPressed() {
-        if (isValidEmployeeId(selectedEmployeeId)) {
+        if (isTablet() && isValidEmployeeId(selectedEmployeeId)) {
             updateTitle(getString(R.string.mainActivityTitle))
             selectedEmployeeId = 0
             openNoSelectedEmployeeFragment()
@@ -84,8 +95,8 @@ class MainActivity : BaseActivity(), MainView {
         if (selectedEmployeeId == employee.id) {
             return
         }
+        selectedEmployeeId = employee.id
         if (isTablet()) {
-            selectedEmployeeId = employee.id
             openEmployeeDetailsFragment(selectedEmployeeId)
         } else {
             EmployeeDetailsActivity.start(this, employee)
@@ -99,7 +110,11 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onContentLoaded() {
         progressBar.visibility = View.GONE
-        contentGroup.visibility = View.VISIBLE
+        listContainer.visibility = View.VISIBLE
+        if (isTablet()) {
+            divider!!.visibility = View.VISIBLE
+            detailsContainer!!.visibility = View.VISIBLE
+        }
     }
 
     private fun openEmployeeDetailsFragment(employeeId: Long) {

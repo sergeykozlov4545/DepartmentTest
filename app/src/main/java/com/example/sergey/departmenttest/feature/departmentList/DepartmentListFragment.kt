@@ -10,6 +10,7 @@ import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.domain.model.Employee
 import com.example.sergey.departmenttest.domain.model.TreeElement
+import com.example.sergey.departmenttest.extansion.open
 import com.example.sergey.departmenttest.feature.core.BaseFragment
 import com.example.sergey.departmenttest.feature.main.MainView
 import com.example.sergey.departmenttest.feature.treeView.ItemAdapter
@@ -18,18 +19,14 @@ import kotlinx.android.synthetic.main.fragment_department_list.*
 class DepartmentListFragment : BaseFragment(), DepartmentListView {
 
     companion object {
-        private const val TAG = "department_list_fragment"
+        const val TAG = "department_list_fragment"
 
         fun open(fragmentManager: FragmentManager, containerId: Int) {
-            if (fragmentManager.isStateSaved) {
-                return
-            }
-
-            val fragment = fragmentManager.findFragmentByTag(TAG) ?: DepartmentListFragment()
-            fragmentManager.beginTransaction()
-                    .replace(containerId, fragment, TAG)
-                    .commit()
+            fragmentManager.open(containerId, getFragment(fragmentManager), TAG)
         }
+
+        private fun getFragment(fragmentManager: FragmentManager) =
+                fragmentManager.findFragmentByTag(TAG) ?: DepartmentListFragment()
     }
 
     private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }

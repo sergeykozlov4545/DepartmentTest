@@ -6,17 +6,14 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import com.example.sergey.departmenttest.R
+import com.example.sergey.departmenttest.extansion.openDialog
 
 class ExitDialogFragment : DialogFragment() {
     companion object {
         private const val TAG = "exit_dialog"
+
         fun open(fragmentManager: FragmentManager) {
-            if (fragmentManager.isStateSaved) {
-                return
-            }
-            ExitDialogFragment().run {
-                show(fragmentManager, TAG)
-            }
+            fragmentManager.openDialog(TAG) { ExitDialogFragment() }
         }
     }
 
