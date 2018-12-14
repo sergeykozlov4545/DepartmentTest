@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
@@ -50,5 +51,14 @@ open class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView, Toolbar
 
     override fun updateTitle(title: String) {
         titleView.text = title
+    }
+
+    override fun setMenu(menuResId: Int, clickListener: (item: MenuItem) -> Boolean) {
+        with(toolbarView) {
+            inflateMenu(menuResId)
+            setOnMenuItemClickListener {
+                return@setOnMenuItemClickListener clickListener(it)
+            }
+        }
     }
 }

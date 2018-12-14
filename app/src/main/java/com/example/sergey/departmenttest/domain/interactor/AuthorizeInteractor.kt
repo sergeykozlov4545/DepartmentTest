@@ -7,11 +7,15 @@ import com.example.sergey.departmenttest.domain.model.OperationStatus
 interface AuthorizeInteractor {
     suspend fun getAuthorizedUser(): AuthorizedUser?
     suspend fun authorizeUser(login: String, password: String): OperationStatus
+    suspend fun logout(): OperationStatus
 }
 
 class AuthorizeInteractorImpl(
         private val repository: EmployeesRepository
 ) : AuthorizeInteractor {
     override suspend fun getAuthorizedUser() = repository.getAuthorizedUser()
-    override suspend fun authorizeUser(login: String, password: String) = repository.authorizeUser(login, password)
+    override suspend fun authorizeUser(login: String, password: String) =
+            repository.authorizeUser(login, password)
+
+    override suspend fun logout() = repository.logout()
 }

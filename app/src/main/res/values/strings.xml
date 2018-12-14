@@ -13,6 +13,7 @@
 
     <!--MainActivity-->
     <string name="mainActivityTitle">Список отделов</string>
+    <string name="menuLogoutTitle">Выйти</string>
 
     <!--EmployeeDetailsActivity-->
     <string name="invalidEmployeeId">Неправильный идентификатор сотрудника. Попробуйте открыть еще раз.</string>

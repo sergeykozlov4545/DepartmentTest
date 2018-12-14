@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 interface EmployeesRepository {
     suspend fun getAuthorizedUser(): AuthorizedUser?
     suspend fun authorizeUser(login: String, password: String): OperationStatus
+    suspend fun logout(): OperationStatus
 
     suspend fun getTreeElements(): List<TreeElement>
     suspend fun toggleDepartmentElement(element: DepartmentElement): List<TreeElement>
@@ -46,6 +47,18 @@ class EmployeesRepositoryImpl(
         }
         delay(2000L)
         return status
+    }
+
+    override suspend fun logout(): OperationStatus {
+        preferenceManager.apply {
+            putString("login", "")
+            putString("password", "")
+        }
+        authorizedUser = null
+        allEmployees?.clear()
+        treeElements?.clear()
+        imageCache.clear()
+        return OperationStatus(isSuccess = true)
     }
 
     override suspend fun getTreeElements() = treeElements.takeIf { it != null }
