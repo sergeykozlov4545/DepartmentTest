@@ -53,17 +53,16 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
 
     override fun onResume() {
         super.onResume()
-        progressBar.visibility = View.VISIBLE
         presenter.loadTreeElements()
     }
 
     override fun onError(exception: Exception) {
         super.onError(exception)
-        progressBar.visibility = View.GONE
+        (activity as? MainView)?.onContentLoaded()
     }
 
     override fun onGetTreeElements(elements: List<TreeElement>) {
-        progressBar.visibility = View.GONE
+        (activity as? MainView)?.onContentLoaded()
         adapter.data = elements
         treeListView.visibility = View.VISIBLE
     }

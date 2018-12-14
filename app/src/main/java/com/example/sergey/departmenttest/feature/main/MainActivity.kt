@@ -3,6 +3,7 @@ package com.example.sergey.departmenttest.feature.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.domain.model.Employee
 import com.example.sergey.departmenttest.extansion.isTablet
@@ -13,6 +14,7 @@ import com.example.sergey.departmenttest.feature.employeeDetails.EmployeeDetails
 import com.example.sergey.departmenttest.feature.employeeDetails.EmployeeDetailsFragment
 import com.example.sergey.departmenttest.feature.login.LoginActivity
 import com.example.sergey.departmenttest.feature.logout.LogoutDialog
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(), MainView {
 
@@ -43,6 +45,7 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onResume() {
         super.onResume()
+        progressBar.visibility = View.VISIBLE
         DepartmentListFragment.open(supportFragmentManager, R.id.listContainer)
 
         if (!isTablet()) {
@@ -79,8 +82,8 @@ class MainActivity : BaseActivity(), MainView {
         if (selectedEmployeeId == employee.id) {
             return
         }
-        selectedEmployeeId = employee.id
         if (isTablet()) {
+            selectedEmployeeId = employee.id
             openEmployeeDetailsFragment(selectedEmployeeId)
         } else {
             EmployeeDetailsActivity.start(this, employee)
@@ -90,6 +93,10 @@ class MainActivity : BaseActivity(), MainView {
     override fun openLoginActivity() {
         LoginActivity.start(this)
         finish()
+    }
+
+    override fun onContentLoaded() {
+        progressBar.visibility = View.GONE
     }
 
     private fun openEmployeeDetailsFragment(employeeId: Long) {
