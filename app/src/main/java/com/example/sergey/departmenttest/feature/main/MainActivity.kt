@@ -99,6 +99,7 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onContentLoaded() {
         progressBar.visibility = View.GONE
+        contentGroup.visibility = View.VISIBLE
     }
 
     private fun openEmployeeDetailsFragment(employeeId: Long) {
