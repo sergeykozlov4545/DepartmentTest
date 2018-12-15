@@ -29,7 +29,7 @@ class LogoutDialog : DialogFragment(), LogoutView, CoroutineScope {
     private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }
 
     private val presenter by lazy {
-        LogoutPresenterImpl(this, departmentsApplication.authorizeInteractor)
+        LogoutPresenterImpl(this, departmentsApplication.authRepository, departmentsApplication.departmentsRepository)
     }
 
     private lateinit var job: Job

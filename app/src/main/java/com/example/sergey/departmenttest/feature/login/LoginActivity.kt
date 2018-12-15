@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
-import com.example.sergey.departmenttest.domain.model.AuthorizedUser
+import com.example.sergey.departmenttest.data.model.AuthorizedUser
 import com.example.sergey.departmenttest.exception.OperationException
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseActivity
@@ -33,7 +33,9 @@ class LoginActivity : BaseActivity(), LoginView {
 
     private val departmentsApplication by lazy { application as DepartmentsApplication }
 
-    private val presenter by lazy { LoginPresenterImpl(this, departmentsApplication.authorizeInteractor) }
+    private val presenter by lazy {
+        LoginPresenterImpl(this, departmentsApplication.authRepository, departmentsApplication.departmentsRepository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

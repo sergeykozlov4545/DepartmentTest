@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.domain.model.Employee
+import com.example.sergey.departmenttest.data.model.Employee
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseActivity
 

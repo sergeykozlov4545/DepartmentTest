@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
-import com.example.sergey.departmenttest.domain.model.Employee
-import com.example.sergey.departmenttest.domain.model.TreeElement
+import com.example.sergey.departmenttest.data.model.Employee
+import com.example.sergey.departmenttest.data.model.TreeElement
 import com.example.sergey.departmenttest.extansion.open
 import com.example.sergey.departmenttest.feature.core.BaseFragment
 import com.example.sergey.departmenttest.feature.main.MainView
@@ -30,7 +30,7 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
     }
 
     private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }
-    private val presenter by lazy { DepartmentListPresenterImpl(this, departmentsApplication.departmentsInteractor) }
+    private val presenter by lazy { DepartmentListPresenterImpl(this, departmentsApplication.departmentsRepository) }
 
     private val adapter = ItemAdapter()
 
@@ -43,14 +43,16 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
         with(treeListView) {
             layoutManager = LinearLayoutManager(activity?.applicationContext)
             adapter = this@DepartmentListFragment.adapter.apply {
-                itemClick = { presenter.treeElementClicked(it) }
+                itemClick = {
+                    // TODO: Обработать тут клик
+                }
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        presenter.loadTreeElements()
+        presenter.loadDepartmentsInfo()
     }
 
     override fun onError(exception: Exception) {

@@ -1,4 +1,4 @@
-package com.example.sergey.departmenttest.domain.model
+package com.example.sergey.departmenttest.data.model
 
 data class DownloadImage(val byteArray: ByteArray) {
     override fun equals(other: Any?): Boolean {

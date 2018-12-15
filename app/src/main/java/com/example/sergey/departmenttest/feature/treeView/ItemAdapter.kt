@@ -10,9 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.domain.model.DepartmentElement
-import com.example.sergey.departmenttest.domain.model.EmployeeElement
-import com.example.sergey.departmenttest.domain.model.TreeElement
+import com.example.sergey.departmenttest.data.model.DepartmentElement
+import com.example.sergey.departmenttest.data.model.EmployeeElement
+import com.example.sergey.departmenttest.data.model.TreeElement
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_department.*
 

@@ -1,6 +1,7 @@
 package com.example.sergey.departmenttest.feature.splash
 
-import com.example.sergey.departmenttest.domain.interactor.AuthorizeInteractor
+import com.example.sergey.departmenttest.data.repository.AuthRepository
+import com.example.sergey.departmenttest.data.repository.DepartmentsRepository
 import com.example.sergey.departmenttest.feature.core.BasePresenter
 import com.example.sergey.departmenttest.feature.core.Presenter
 
@@ -11,26 +12,28 @@ interface SplashPresenter : BasePresenter<SplashView> {
 
 class SplashPresenterImpl(
         override val view: SplashView,
-        private val authorizeInteractor: AuthorizeInteractor
+        private val authRepository: AuthRepository,
+        private val departmentsRepository: DepartmentsRepository
 ) : Presenter<SplashView>(view), SplashPresenter {
 
     override fun loadAuthorizedUser() = runInCoroutine {
-        view.onGetAuthorizedUser(authorizeInteractor.getAuthorizedUser())
+        view.onGetAuthorizedUser(authRepository.getAuthorizedUser())
     }
 
     override fun checkAuthorizedUser() = runInCoroutine {
-        val authorizedUser = authorizeInteractor.getAuthorizedUser()
-        if (authorizedUser == null) {
+        val user = authRepository.getAuthorizedUser()
+        if (user == null) {
             view.openLoginActivity()
             return@runInCoroutine
         }
 
-        val status = authorizeInteractor.authorizeUser(authorizedUser.login, authorizedUser.password)
+        val status = authRepository.authorizeUser(user.login, user.password)
         if (status.isSuccess) {
+            departmentsRepository.setAuthorizedUser(user)
             view.openMainActivity()
             return@runInCoroutine
         }
 
-        view.openLoginActivity(authorizedUser, status.message)
+        view.openLoginActivity(user, status.message)
     }
 }

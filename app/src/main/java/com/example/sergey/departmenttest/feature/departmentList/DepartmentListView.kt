@@ -1,7 +1,7 @@
 package com.example.sergey.departmenttest.feature.departmentList
 
-import com.example.sergey.departmenttest.domain.model.Employee
-import com.example.sergey.departmenttest.domain.model.TreeElement
+import com.example.sergey.departmenttest.data.model.Employee
+import com.example.sergey.departmenttest.data.model.TreeElement
 import com.example.sergey.departmenttest.feature.core.BaseView
 
 interface DepartmentListView : BaseView {

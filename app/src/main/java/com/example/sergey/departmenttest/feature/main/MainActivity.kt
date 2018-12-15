@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.domain.model.Employee
+import com.example.sergey.departmenttest.data.model.Employee
 import com.example.sergey.departmenttest.extansion.close
 import com.example.sergey.departmenttest.extansion.isTablet
 import com.example.sergey.departmenttest.extansion.toast

@@ -1,4 +1,4 @@
-package com.example.sergey.departmenttest.domain.model
+package com.example.sergey.departmenttest.data.model
 
 sealed class TreeElement(
         val id: String,

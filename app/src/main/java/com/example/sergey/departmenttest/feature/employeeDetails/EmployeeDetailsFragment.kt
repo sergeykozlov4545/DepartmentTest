@@ -11,8 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
-import com.example.sergey.departmenttest.domain.model.DownloadImage
-import com.example.sergey.departmenttest.domain.model.Employee
+import com.example.sergey.departmenttest.data.model.DownloadImage
+import com.example.sergey.departmenttest.data.model.Employee
 import com.example.sergey.departmenttest.extansion.open
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseFragment
@@ -36,7 +36,7 @@ class EmployeeDetailsFragment : BaseFragment(), DetailsView {
     }
 
     private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }
-    private val presenter by lazy { DetailsPresenterImpl(this, departmentsApplication.departmentsInteractor) }
+    private val presenter by lazy { DetailsPresenterImpl(this, departmentsApplication.departmentsRepository) }
 
     private lateinit var employee: Employee
 

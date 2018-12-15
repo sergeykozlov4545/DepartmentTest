@@ -1,7 +1,7 @@
 package com.example.sergey.departmenttest.data.remote
 
-import com.example.sergey.departmenttest.domain.model.Department
-import com.example.sergey.departmenttest.domain.model.OperationStatus
+import com.example.sergey.departmenttest.data.model.Department
+import com.example.sergey.departmenttest.data.model.OperationStatus
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
 import retrofit2.http.GET

@@ -35,6 +35,5 @@ class ServiceManagerImpl : ServiceManager {
                 .build()
     }
 
-    override val serviceApi: ServiceApi
-        get() = retrofit.create(ServiceApi::class.java)
+    override val serviceApi: ServiceApi by lazy { retrofit.create(ServiceApi::class.java) }
 }
