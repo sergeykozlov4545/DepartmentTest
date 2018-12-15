@@ -83,9 +83,9 @@ class PulsarIndicator @JvmOverloads constructor(
 
     private fun createAllAnimators() {
         layers.forEachIndexed { index, layer ->
-            animators.add(AlphaAnimatorFactory.create(layer))
+            animators.add(createAlphaAnimator(layer))
 
-            val radiusAnimator = RadiusAnimatorFactory.create(layer).apply {
+            val radiusAnimator = createRadiusAnimator(layer).apply {
                 if (index == 0) {
                     addUpdateListener { invalidate() }
                     return@apply
@@ -111,9 +111,8 @@ class PulsarIndicator @JvmOverloads constructor(
             val durationAlphaAnimation: Long = durationAnimation - 150L
     )
 
-    private object AlphaAnimatorFactory {
-        fun create(layer: IndicatorLayer): ValueAnimator {
-            return ValueAnimator.ofInt(255, 0).apply {
+    private fun createAlphaAnimator(layer: IndicatorLayer) =
+            ValueAnimator.ofInt(255, 0).apply {
                 startDelay = layer.startAlphaDelay
                 duration = layer.durationAlphaAnimation
                 addListener(object : EmptyAnimatorListener() {
@@ -123,12 +122,9 @@ class PulsarIndicator @JvmOverloads constructor(
                 })
                 addUpdateListener { layer.paint.alpha = it.animatedValue as Int }
             }
-        }
-    }
 
-    private object RadiusAnimatorFactory {
-        fun create(layer: IndicatorLayer): ValueAnimator {
-            return ValueAnimator.ofFloat(0f, layer.maxRadius).apply {
+    private fun createRadiusAnimator(layer: IndicatorLayer) =
+            ValueAnimator.ofFloat(0f, layer.maxRadius).apply {
                 startDelay = layer.startDelay
                 duration = layer.durationAnimation
                 addListener(object : EmptyAnimatorListener() {
@@ -138,6 +134,4 @@ class PulsarIndicator @JvmOverloads constructor(
                 })
                 addUpdateListener { layer.currentRadius = it.animatedValue as Float }
             }
-        }
-    }
 }

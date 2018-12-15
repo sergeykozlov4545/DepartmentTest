@@ -3,12 +3,9 @@ package com.example.sergey.departmenttest.feature.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.data.model.Employee
-import com.example.sergey.departmenttest.extansion.close
-import com.example.sergey.departmenttest.extansion.isTablet
-import com.example.sergey.departmenttest.extansion.toast
+import com.example.sergey.departmenttest.extansion.*
 import com.example.sergey.departmenttest.feature.core.BaseActivity
 import com.example.sergey.departmenttest.feature.departmentList.DepartmentListFragment
 import com.example.sergey.departmenttest.feature.employeeDetails.EmployeeDetailsActivity
@@ -47,7 +44,7 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onResume() {
         super.onResume()
-        progressBar.visibility = View.VISIBLE
+        progressBar.showView()
         DepartmentListFragment.open(supportFragmentManager, R.id.listContainer)
 
         if (!isTablet()) {
@@ -109,11 +106,11 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     override fun onContentLoaded() {
-        progressBar.visibility = View.GONE
-        listContainer.visibility = View.VISIBLE
+        progressBar.hideView()
+        listContainer.showView()
         if (isTablet()) {
-            divider!!.visibility = View.VISIBLE
-            detailsContainer!!.visibility = View.VISIBLE
+            divider!!.showView()
+            detailsContainer!!.showView()
         }
     }
 

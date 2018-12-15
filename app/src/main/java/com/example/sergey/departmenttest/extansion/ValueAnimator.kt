@@ -14,7 +14,6 @@ fun ValueAnimator.addRestartedListener(listener: () -> Unit) {
         }
 
         override fun onAnimationEnd(animation: Animator?) {
-            animation?.isRunning
             if (!isCanceled) {
                 listener()
             }

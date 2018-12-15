@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
-import com.example.sergey.departmenttest.data.model.Employee
+import com.example.sergey.departmenttest.data.model.DepartmentElement
+import com.example.sergey.departmenttest.data.model.EmployeeElement
 import com.example.sergey.departmenttest.data.model.TreeElement
+import com.example.sergey.departmenttest.extansion.between
 import com.example.sergey.departmenttest.extansion.open
+import com.example.sergey.departmenttest.extansion.showView
 import com.example.sergey.departmenttest.feature.core.BaseFragment
 import com.example.sergey.departmenttest.feature.main.MainView
 import com.example.sergey.departmenttest.feature.treeView.ItemAdapter
@@ -32,20 +35,21 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
     private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }
     private val presenter by lazy { DepartmentListPresenterImpl(this, departmentsApplication.departmentsRepository) }
 
+    private val info: MutableList<TreeElement> = ArrayList()
     private val adapter = ItemAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_department_list, container, false)
-    }
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ) = inflater.inflate(R.layout.fragment_department_list, container, false)!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(treeListView) {
             layoutManager = LinearLayoutManager(activity?.applicationContext)
             adapter = this@DepartmentListFragment.adapter.apply {
-                itemClick = {
-                    // TODO: Обработать тут клик
-                }
+                itemClick = ::itemClick
             }
         }
     }
@@ -62,11 +66,32 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
 
     override fun onGetTreeElements(elements: List<TreeElement>) {
         (activity as? MainView)?.onContentLoaded()
-        adapter.data = elements
-        treeListView.visibility = View.VISIBLE
+        info.addAll(elements.apply { first().isVisible = true })
+        adapter.data = info.filter(TreeElement::isVisible)
+        treeListView.showView()
     }
 
-    override fun openDetailsScreen(employee: Employee) {
-        (activity as? MainView)?.openDetailsScreen(employee)
+    private fun itemClick(treeElement: TreeElement) {
+        when (treeElement) {
+            is EmployeeElement -> (activity as? MainView)?.openDetailsScreen(treeElement.employee)
+            is DepartmentElement -> toggleDepartmentElement(treeElement)
+        }
+    }
+
+    private fun toggleDepartmentElement(element: DepartmentElement) {
+        if (element.isOpened) {
+            info.filter { it.timeRange.between(element.timeRange) }
+                    .forEach {
+                        it.isVisible = false
+                        if (it is DepartmentElement) {
+                            it.isOpened = false
+                        }
+                    }
+            element.isVisible = true
+        } else {
+            info.filter { it.parentId == element.id }.forEach { it.isVisible = true }
+            element.isOpened = true
+        }
+        adapter.data = info.filter(TreeElement::isVisible)
     }
 }

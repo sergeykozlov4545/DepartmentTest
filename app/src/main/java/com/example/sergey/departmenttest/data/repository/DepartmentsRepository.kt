@@ -1,23 +1,20 @@
 package com.example.sergey.departmenttest.data.repository
 
-import com.example.sergey.departmenttest.data.remote.ServiceApi
 import com.example.sergey.departmenttest.data.model.*
+import com.example.sergey.departmenttest.data.remote.ServiceApi
 
 interface DepartmentsRepository {
     fun setAuthorizedUser(user: AuthorizedUser)
-
     suspend fun getDepartmentsInfo(): List<TreeElement>
-    suspend fun setDepartmentsInfo(info: List<TreeElement>)
-
     suspend fun getEmployee(id: Long): Employee?
     suspend fun getEmployeePhoto(employeeId: Long): DownloadImage
-
     fun clear()
 }
 
 class DepartmentsRepositoryImpl(
         private val serviceApi: ServiceApi
 ) : DepartmentsRepository {
+
     private lateinit var user: AuthorizedUser
 
     private var info: MutableList<TreeElement>? = null
@@ -37,14 +34,9 @@ class DepartmentsRepositoryImpl(
         }
     }
 
-    override suspend fun setDepartmentsInfo(info: List<TreeElement>) {
-        this.info?.clear()
-        this.info?.addAll(info)
-    }
-
     override suspend fun getEmployee(id: Long) = info?.filter { it is EmployeeElement }
             ?.map { (it as EmployeeElement).employee }
-            ?.find { it.id == 1L }
+            ?.find { it.id == id }
 
     override suspend fun getEmployeePhoto(employeeId: Long): DownloadImage {
         return imageCache[employeeId] ?: run {
@@ -57,6 +49,7 @@ class DepartmentsRepositoryImpl(
 
     override fun clear() {
         info?.clear()
+        info = null
         imageCache.clear()
     }
 }

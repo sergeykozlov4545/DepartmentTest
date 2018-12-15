@@ -13,6 +13,8 @@ import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.data.model.DepartmentElement
 import com.example.sergey.departmenttest.data.model.EmployeeElement
 import com.example.sergey.departmenttest.data.model.TreeElement
+import com.example.sergey.departmenttest.extansion.hideView
+import com.example.sergey.departmenttest.extansion.showView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_department.*
 
@@ -52,8 +54,9 @@ class ItemHolder(
 
             nameView.text = getName(value)
             itemView.setOnClickListener {
-                value.takeIf { element -> element != null }
-                        ?.let { element -> itemClick?.invoke(element) }
+                if (value != null) {
+                    itemClick?.invoke(value)
+                }
             }
 
             configLeftMargin(value)
@@ -63,8 +66,8 @@ class ItemHolder(
         getDrawable(value).takeIf { it != null }
                 ?.let {
                     iconView.setImageDrawable(it)
-                    iconView.visibility = View.VISIBLE
-                } ?: run { iconView.visibility = View.INVISIBLE }
+                    iconView.showView()
+                } ?: run { iconView.hideView(true) }
     }
 
     private fun getDrawable(value: TreeElement?): Drawable? {

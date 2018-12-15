@@ -4,6 +4,7 @@ import com.example.sergey.departmenttest.data.repository.AuthRepository
 import com.example.sergey.departmenttest.data.repository.DepartmentsRepository
 import com.example.sergey.departmenttest.data.model.AuthorizedUser
 import com.example.sergey.departmenttest.exception.OperationException
+import com.example.sergey.departmenttest.extansion.runInScope
 import com.example.sergey.departmenttest.feature.core.BasePresenter
 import com.example.sergey.departmenttest.feature.core.Presenter
 
@@ -16,7 +17,8 @@ class LoginPresenterImpl(
         private val authRepository: AuthRepository,
         private val departmentsRepository: DepartmentsRepository
 ) : Presenter<LoginView>(view), LoginPresenter {
-    override fun authorizeUser(login: String, password: String) = runInCoroutine {
+
+    override fun authorizeUser(login: String, password: String) = runInScope {
         val status = authRepository.authorizeUser(login, password)
         if (status.isSuccess) {
             departmentsRepository.setAuthorizedUser(AuthorizedUser(login, password))

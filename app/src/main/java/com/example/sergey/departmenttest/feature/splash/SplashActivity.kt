@@ -28,14 +28,11 @@ class SplashActivity : BaseActivity(), SplashView {
 
     override fun onError(exception: Exception) {
         super.onError(exception)
-        presenter.loadAuthorizedUser()
+        presenter.requestOpenLoginActivity()
     }
 
-    override fun onGetAuthorizedUser(authorizedUser: AuthorizedUser?) =
-            openLoginActivity(authorizedUser)
-
-    override fun openLoginActivity(authorizedUser: AuthorizedUser?, errorMessage: String) {
-        LoginActivity.start(this, authorizedUser, errorMessage)
+    override fun openLoginActivity(user: AuthorizedUser?, errorMessage: String) {
+        LoginActivity.start(this, user, errorMessage)
         finish()
     }
 

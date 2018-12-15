@@ -1,19 +1,18 @@
 package com.example.sergey.departmenttest.feature.core
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.View
+import android.support.v4.app.DialogFragment
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.extansion.toast
 import kotlinx.coroutines.CoroutineScope
 import java.io.IOException
 
-open class BaseFragment : Fragment(), BaseView {
+open class BaseDialogFragment : DialogFragment(), BaseView {
 
     override lateinit var scope: CoroutineScope
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         scope = BaseCoroutineScope()
     }
 

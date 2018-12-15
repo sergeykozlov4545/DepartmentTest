@@ -3,12 +3,12 @@ package com.example.sergey.departmenttest.feature.exit
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.extansion.openDialog
+import com.example.sergey.departmenttest.feature.core.BaseDialogFragment
 
-class ExitDialogFragment : DialogFragment() {
+class ExitDialogFragment : BaseDialogFragment() {
     companion object {
         private const val TAG = "exit_dialog"
 

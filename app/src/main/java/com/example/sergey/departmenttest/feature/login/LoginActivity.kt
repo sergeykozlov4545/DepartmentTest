@@ -3,11 +3,12 @@ package com.example.sergey.departmenttest.feature.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.data.model.AuthorizedUser
 import com.example.sergey.departmenttest.exception.OperationException
+import com.example.sergey.departmenttest.extansion.hideView
+import com.example.sergey.departmenttest.extansion.showView
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseActivity
 import com.example.sergey.departmenttest.feature.main.MainActivity
@@ -64,18 +65,18 @@ class LoginActivity : BaseActivity(), LoginView {
                 return@setOnClickListener
             }
 
-            progressBar.visibility = View.VISIBLE
+            progressBar.showView()
             presenter.authorizeUser(login, password)
         }
     }
 
     override fun onError(exception: Exception) {
         super.onError(exception)
-        progressBar.visibility = View.INVISIBLE
+        progressBar.hideView(true)
     }
 
     override fun openMainActivity() {
-        progressBar.visibility = View.INVISIBLE
+        progressBar.hideView(true)
         MainActivity.start(this)
         finish()
     }

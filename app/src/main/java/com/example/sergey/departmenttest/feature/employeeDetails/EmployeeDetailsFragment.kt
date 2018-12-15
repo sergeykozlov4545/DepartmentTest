@@ -13,7 +13,9 @@ import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.data.model.DownloadImage
 import com.example.sergey.departmenttest.data.model.Employee
+import com.example.sergey.departmenttest.extansion.hideView
 import com.example.sergey.departmenttest.extansion.open
+import com.example.sergey.departmenttest.extansion.showView
 import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseFragment
 import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
@@ -40,9 +42,11 @@ class EmployeeDetailsFragment : BaseFragment(), DetailsView {
 
     private lateinit var employee: Employee
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_employee_details, container, false)
-    }
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ) = inflater.inflate(R.layout.fragment_employee_details, container, false)!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,13 +77,13 @@ class EmployeeDetailsFragment : BaseFragment(), DetailsView {
             openIntent(intent, R.string.chooseSender, R.string.invalidChooseSender)
         }
 
-        progressBar.visibility = View.VISIBLE
+        progressBar.showView()
         presenter.loadEmployee(employeeId)
     }
 
     override fun onError(exception: Exception) {
         super.onError(exception)
-        progressBar.visibility = View.GONE
+        progressBar.hideView()
     }
 
     override fun onGetEmployee(employee: Employee, downloadImage: DownloadImage) {
@@ -93,8 +97,8 @@ class EmployeeDetailsFragment : BaseFragment(), DetailsView {
         phoneView.text = getString(R.string.employeePhoneFmt, getPhoneValue(employee))
         emailView.text = getString(R.string.employeeEmailFmt, getEmailValue(employee))
 
-        progressBar.visibility = View.GONE
-        contentGroup.visibility = View.VISIBLE
+        progressBar.hideView()
+        contentGroup.showView()
     }
 
     private fun getPhoneValue(employee: Employee): String =

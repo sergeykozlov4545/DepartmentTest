@@ -99,9 +99,8 @@ class DotsProgressBar @JvmOverloads constructor(
         }
     }
 
-    private fun Resources.Theme.obtainAttributes(attrs: AttributeSet): TypedArray {
-        return obtainStyledAttributes(attrs, R.styleable.DotsProgressBar, 0, 0)
-    }
+    private fun Resources.Theme.obtainAttributes(attrs: AttributeSet) =
+            obtainStyledAttributes(attrs, R.styleable.DotsProgressBar, 0, 0)
 
     private fun TypedArray.restoreTypedArray() {
         try {

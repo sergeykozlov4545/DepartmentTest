@@ -6,7 +6,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-fun CoroutineScope.runInCoroutine(block: suspend () -> Unit) {
+fun CoroutineScope.runInScope(block: suspend () -> Unit) {
     launch {
         try {
             block()
@@ -15,9 +15,9 @@ fun CoroutineScope.runInCoroutine(block: suspend () -> Unit) {
                 throw exception
             }
 
-            this@runInCoroutine.takeIf { it is ErrorView }
+            this@runInScope.takeIf { it is ErrorView }
                     ?.also { (it as? ErrorView)?.onError(exception) }
-                    ?: this@runInCoroutine.takeIf { it is Presenter<*> }
+                    ?: this@runInScope.takeIf { it is Presenter<*> }
                             ?.also { (it as? Presenter<*>)?.view?.onError(exception) }
                     ?: throw exception
         }

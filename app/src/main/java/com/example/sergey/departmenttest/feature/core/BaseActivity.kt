@@ -10,29 +10,21 @@ import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import java.io.IOException
-import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView, ToolbarCallback {
+open class BaseActivity : AppCompatActivity(), BaseView, ToolbarCallback {
 
-    private lateinit var job: Job
-    private var isCreatedJob = false
-
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+    override lateinit var scope: CoroutineScope
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        job = Job()
-        isCreatedJob = true
+        scope = BaseCoroutineScope()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (isCreatedJob) job.cancel()
+        (scope as? BaseCoroutineScope)?.destroy()
     }
 
     override fun onError(exception: Exception) {
@@ -56,9 +48,7 @@ open class BaseActivity : AppCompatActivity(), CoroutineScope, BaseView, Toolbar
     override fun setMenu(menuResId: Int, clickListener: (item: MenuItem) -> Boolean) {
         with(toolbarView) {
             inflateMenu(menuResId)
-            setOnMenuItemClickListener {
-                return@setOnMenuItemClickListener clickListener(it)
-            }
+            setOnMenuItemClickListener(clickListener)
         }
     }
 }

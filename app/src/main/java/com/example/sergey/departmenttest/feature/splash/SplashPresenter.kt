@@ -2,12 +2,13 @@ package com.example.sergey.departmenttest.feature.splash
 
 import com.example.sergey.departmenttest.data.repository.AuthRepository
 import com.example.sergey.departmenttest.data.repository.DepartmentsRepository
+import com.example.sergey.departmenttest.extansion.runInScope
 import com.example.sergey.departmenttest.feature.core.BasePresenter
 import com.example.sergey.departmenttest.feature.core.Presenter
 
 interface SplashPresenter : BasePresenter<SplashView> {
-    fun loadAuthorizedUser()
     fun checkAuthorizedUser()
+    fun requestOpenLoginActivity()
 }
 
 class SplashPresenterImpl(
@@ -16,24 +17,25 @@ class SplashPresenterImpl(
         private val departmentsRepository: DepartmentsRepository
 ) : Presenter<SplashView>(view), SplashPresenter {
 
-    override fun loadAuthorizedUser() = runInCoroutine {
-        view.onGetAuthorizedUser(authRepository.getAuthorizedUser())
-    }
-
-    override fun checkAuthorizedUser() = runInCoroutine {
+    override fun checkAuthorizedUser() = runInScope {
         val user = authRepository.getAuthorizedUser()
         if (user == null) {
             view.openLoginActivity()
-            return@runInCoroutine
+            return@runInScope
         }
 
         val status = authRepository.authorizeUser(user.login, user.password)
         if (status.isSuccess) {
             departmentsRepository.setAuthorizedUser(user)
             view.openMainActivity()
-            return@runInCoroutine
+            return@runInScope
         }
 
         view.openLoginActivity(user, status.message)
+    }
+
+    override fun requestOpenLoginActivity() = runInScope {
+        val user = authRepository.getAuthorizedUser()
+        view.openLoginActivity(user, "")
     }
 }
