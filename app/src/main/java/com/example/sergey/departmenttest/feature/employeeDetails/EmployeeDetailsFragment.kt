@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.data.model.DownloadImage
 import com.example.sergey.departmenttest.data.model.Employee
 import com.example.sergey.departmenttest.extansion.hideView
@@ -20,6 +19,8 @@ import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseFragment
 import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
 import kotlinx.android.synthetic.main.fragment_employee_details.*
+import org.koin.core.parameter.parametersOf
+import org.koin.standalone.inject
 
 class EmployeeDetailsFragment : BaseFragment(), DetailsView {
 
@@ -37,8 +38,7 @@ class EmployeeDetailsFragment : BaseFragment(), DetailsView {
         }
     }
 
-    private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }
-    private val presenter by lazy { DetailsPresenterImpl(this, departmentsApplication.departmentsRepository) }
+    private val presenter: DetailsPresenter by inject { parametersOf(this) }
 
     private lateinit var employee: Employee
 

@@ -5,9 +5,10 @@ import android.support.v4.app.DialogFragment
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.extansion.toast
 import kotlinx.coroutines.CoroutineScope
+import org.koin.standalone.KoinComponent
 import java.io.IOException
 
-open class BaseDialogFragment : DialogFragment(), BaseView {
+open class BaseDialogFragment : DialogFragment(), BaseView, KoinComponent {
 
     override lateinit var scope: CoroutineScope
 

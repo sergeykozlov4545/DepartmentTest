@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.data.model.DepartmentElement
 import com.example.sergey.departmenttest.data.model.EmployeeElement
 import com.example.sergey.departmenttest.data.model.TreeElement
@@ -18,6 +17,8 @@ import com.example.sergey.departmenttest.feature.core.BaseFragment
 import com.example.sergey.departmenttest.feature.main.MainView
 import com.example.sergey.departmenttest.feature.treeView.ItemAdapter
 import kotlinx.android.synthetic.main.fragment_department_list.*
+import org.koin.core.parameter.parametersOf
+import org.koin.standalone.inject
 
 class DepartmentListFragment : BaseFragment(), DepartmentListView {
 
@@ -32,8 +33,7 @@ class DepartmentListFragment : BaseFragment(), DepartmentListView {
                 fragmentManager.findFragmentByTag(TAG) ?: DepartmentListFragment()
     }
 
-    private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }
-    private val presenter by lazy { DepartmentListPresenterImpl(this, departmentsApplication.departmentsRepository) }
+    private val presenter: DepartmentListPresenter by inject { parametersOf(this) }
 
     private val info: MutableList<TreeElement> = ArrayList()
     private val adapter = ItemAdapter()

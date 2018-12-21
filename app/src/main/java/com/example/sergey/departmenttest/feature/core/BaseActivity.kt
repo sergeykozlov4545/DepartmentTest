@@ -10,10 +10,11 @@ import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.toolbar.ToolbarCallback
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.CoroutineScope
+import org.koin.standalone.KoinComponent
 import java.io.IOException
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity(), BaseView, ToolbarCallback {
+open class BaseActivity : AppCompatActivity(), BaseView, ToolbarCallback, KoinComponent {
 
     override lateinit var scope: CoroutineScope
 

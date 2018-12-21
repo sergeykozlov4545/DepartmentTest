@@ -6,9 +6,10 @@ import android.view.View
 import com.example.sergey.departmenttest.R
 import com.example.sergey.departmenttest.extansion.toast
 import kotlinx.coroutines.CoroutineScope
+import org.koin.standalone.KoinComponent
 import java.io.IOException
 
-open class BaseFragment : Fragment(), BaseView {
+open class BaseFragment : Fragment(), BaseView, KoinComponent {
 
     override lateinit var scope: CoroutineScope
 

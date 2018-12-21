@@ -1,9 +1,9 @@
 package com.example.sergey.departmenttest.data.repository
 
 import com.example.sergey.departmenttest.data.local.PreferenceManager
-import com.example.sergey.departmenttest.data.remote.ServiceApi
 import com.example.sergey.departmenttest.data.model.AuthorizedUser
 import com.example.sergey.departmenttest.data.model.OperationStatus
+import com.example.sergey.departmenttest.data.remote.ServiceApi
 import kotlinx.coroutines.delay
 
 interface AuthRepository {
@@ -44,4 +44,3 @@ class AuthRepositoryImpl(
         authorizedUser = null
     }
 }
-

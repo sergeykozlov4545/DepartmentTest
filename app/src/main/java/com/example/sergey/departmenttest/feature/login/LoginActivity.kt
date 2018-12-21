@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.data.model.AuthorizedUser
 import com.example.sergey.departmenttest.exception.OperationException
 import com.example.sergey.departmenttest.extansion.hideView
@@ -13,6 +12,8 @@ import com.example.sergey.departmenttest.extansion.toast
 import com.example.sergey.departmenttest.feature.core.BaseActivity
 import com.example.sergey.departmenttest.feature.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.core.parameter.parametersOf
+import org.koin.standalone.inject
 
 class LoginActivity : BaseActivity(), LoginView {
 
@@ -29,14 +30,12 @@ class LoginActivity : BaseActivity(), LoginView {
             }
             intent.putExtra(BUNDLE_ERROR_MESSAGE, errorMessage)
             context.startActivity(intent)
+
+            intent.runCatching { }
         }
     }
 
-    private val departmentsApplication by lazy { application as DepartmentsApplication }
-
-    private val presenter by lazy {
-        LoginPresenterImpl(this, departmentsApplication.authRepository, departmentsApplication.departmentsRepository)
-    }
+    private val presenter: LoginPresenter by inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +52,7 @@ class LoginActivity : BaseActivity(), LoginView {
             passwordView.setText(this)
         }
 
+        // TODO: Убрать в конце
         loginView.setText("test_user")
         passwordView.setText("test_pass")
 

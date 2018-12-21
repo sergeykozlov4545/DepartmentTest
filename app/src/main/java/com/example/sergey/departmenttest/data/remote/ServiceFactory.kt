@@ -7,19 +7,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-interface ServiceManager {
-    val serviceApi: ServiceApi
-}
+object ServiceFactory {
 
-class ServiceManagerImpl : ServiceManager {
+    private const val BASE_URL = "https://contact.taxsee.com/Contacts.svc/"
 
-    companion object {
-        private const val BASE_URL = "https://contact.taxsee.com/Contacts.svc/"
-    }
-
-    private val retrofit: Retrofit
-
-    init {
+    fun create(): ServiceApi {
         val logger = HttpLoggingInterceptor()
         logger.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
 
@@ -27,13 +19,13 @@ class ServiceManagerImpl : ServiceManager {
                 .addNetworkInterceptor(logger)
                 .build()
 
-        retrofit = Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-    }
 
-    override val serviceApi: ServiceApi by lazy { retrofit.create(ServiceApi::class.java) }
+        return retrofit.create(ServiceApi::class.java)
+    }
 }

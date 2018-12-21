@@ -5,10 +5,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import com.example.sergey.departmenttest.R
-import com.example.sergey.departmenttest.application.DepartmentsApplication
 import com.example.sergey.departmenttest.extansion.openDialog
 import com.example.sergey.departmenttest.feature.core.BaseDialogFragment
 import com.example.sergey.departmenttest.feature.main.MainView
+import org.koin.core.parameter.parametersOf
+import org.koin.standalone.inject
 
 class LogoutDialog : BaseDialogFragment(), LogoutView {
 
@@ -20,11 +21,7 @@ class LogoutDialog : BaseDialogFragment(), LogoutView {
         }
     }
 
-    private val departmentsApplication by lazy { activity!!.application as DepartmentsApplication }
-
-    private val presenter by lazy {
-        LogoutPresenterImpl(this, departmentsApplication.authRepository, departmentsApplication.departmentsRepository)
-    }
+    private val presenter: LogoutPresenter by inject { parametersOf(this) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(activity)
